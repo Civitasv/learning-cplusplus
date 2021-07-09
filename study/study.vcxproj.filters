@@ -18,5 +18,16 @@
     <ClCompile Include="study.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="FirstClass.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="FirstClass.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="resource.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
