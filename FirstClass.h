@@ -6,5 +6,5 @@ public:
 	double length_;
 	double get_length();
 	void set_length(double length);
-	virtual void get() = 0; // ´¿Ðéº¯Êý
+	virtual void get() = 0; 
 };
