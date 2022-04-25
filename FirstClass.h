@@ -7,4 +7,5 @@ public:
 	double get_length();
 	void set_length(double length);
 	virtual void get() = 0; 
+	int operator + ();
 };

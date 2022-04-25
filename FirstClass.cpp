@@ -8,3 +8,7 @@ void FirstClass::set_length(double length)
 {
 	length_ = length;
 }
+
+int FirstClass::operator+(){
+	return 0;
+}

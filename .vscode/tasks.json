@@ -1,0 +1,38 @@
+{
+  "tasks": [
+    {
+      "label": "create build directory",
+      "type": "shell",
+      "linux": {
+        "command": "mkdir -p ${fileDirname}/bin"
+      },
+      "windows": {
+        "command": "mkdir -Force '${fileDirname}\\bin'"
+      }
+    },
+    {
+      "type": "cppbuild",
+      "label": "g++ execute",
+      "command": "/usr/bin/g++",
+      "args": [
+        "-fdiagnostics-color=always",
+        "-g",
+        "${file}",
+        "-o",
+        "${fileDirname}/bin/${fileBasenameNoExtension}"
+      ],
+      "options": {
+        "cwd": "${fileDirname}"
+      },
+      "problemMatcher": [
+        "$gcc"
+      ],
+      "group": "build",
+      "detail": "调试器生成的任务。",
+      "dependsOn": [
+        "create build directory"
+      ]
+    }
+  ],
+  "version": "2.0.0"
+}
