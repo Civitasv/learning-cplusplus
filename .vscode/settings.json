@@ -1,5 +1,8 @@
 {
     "files.associations": {
-        "cmath": "cpp"
-    }
+        "cmath": "cpp",
+        "lexical_conventions": "cpp"
+    },
+    "editor.formatOnSave": true,
+    "editor.formatOnType": true
 }
