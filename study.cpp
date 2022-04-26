@@ -144,6 +144,8 @@ void Pointer()
 	int var1;
 	char var2[10];
 
+	std::string ss = "ss";
+
 	cout << "var1 变量的地址： ";
 	cout << &var1 << endl;
 
