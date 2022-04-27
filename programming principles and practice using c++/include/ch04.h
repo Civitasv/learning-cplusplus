@@ -22,5 +22,10 @@ void ch04_exercises_12(int max);
 void ch04_exercises_13(int max);
 void ch04_exercises_15();
 void ch04_exercises_16();
+void ch04_exercises_17();
+void ch04_exercises_18();
+void ch04_exercises_19();
+void ch04_exercises_20();
+void ch04_exercises_21();
 
 #endif

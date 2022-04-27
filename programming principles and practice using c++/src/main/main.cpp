@@ -26,7 +26,8 @@ int main()
     // ch04_exercises_08();
     // ch04_exercises_09();
     // ch04_exercises_10();
-    ch04_exercises_11();
+    // ch04_exercises_11();
     // ch04_exercises_13(100);
+    ch04_exercises_21();
     return 0;
 }
