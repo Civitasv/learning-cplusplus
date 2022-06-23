@@ -1,0 +1,131 @@
+{
+  "main": {
+    "id": "c1fc8f61ffc3d2b9",
+    "type": "split",
+    "children": [
+      {
+        "id": "61ecff600081638b",
+        "type": "leaf",
+        "state": {
+          "type": "markdown",
+          "state": {
+            "file": "STL/01 容器.md",
+            "mode": "source",
+            "source": false
+          }
+        }
+      }
+    ],
+    "direction": "vertical"
+  },
+  "left": {
+    "id": "0058d8fc1f814e96",
+    "type": "split",
+    "children": [
+      {
+        "id": "c6ed0773c2078476",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "f16fe43bdf1b26fb",
+            "type": "leaf",
+            "state": {
+              "type": "file-explorer",
+              "state": {}
+            }
+          },
+          {
+            "id": "afdf89713d8d27e9",
+            "type": "leaf",
+            "state": {
+              "type": "search",
+              "state": {
+                "query": "tag:#执行中",
+                "matchingCase": false,
+                "explainSearch": false,
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical"
+              }
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 267.5
+  },
+  "right": {
+    "id": "94d74886e9927f0e",
+    "type": "split",
+    "children": [
+      {
+        "id": "20c721e517f02d2d",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "54a714d7a8da6b2f",
+            "type": "leaf",
+            "state": {
+              "type": "backlink",
+              "state": {
+                "file": "STL/01 容器.md",
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical",
+                "showSearch": false,
+                "searchQuery": "",
+                "backlinkCollapsed": false,
+                "unlinkedCollapsed": false
+              }
+            }
+          },
+          {
+            "id": "0a9610a525a6ca3c",
+            "type": "leaf",
+            "state": {
+              "type": "calendar",
+              "state": {}
+            }
+          },
+          {
+            "id": "998a0bd55f65ff7e",
+            "type": "leaf",
+            "state": {
+              "type": "advanced-tables-toolbar",
+              "state": {}
+            }
+          },
+          {
+            "id": "58450d6886ecb217",
+            "type": "leaf",
+            "state": {
+              "type": "tag",
+              "state": {
+                "sortOrder": "frequency",
+                "useHierarchy": true
+              }
+            }
+          }
+        ],
+        "currentTab": 2
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300,
+    "collapsed": true
+  },
+  "active": "61ecff600081638b",
+  "lastOpenFiles": [
+    "STL/01 容器.md",
+    "STL/02.md",
+    "C++/命名规则.md",
+    "C++/代码风格.md",
+    "images/Clion Google C++ Style.png",
+    "images/Pasted image 20220607060445.png",
+    "C++/Google Test.md",
+    "C++/enum.md",
+    "C++/default keyword.md",
+    "C++/C++ Writer and Reader.md"
+  ]
+}
