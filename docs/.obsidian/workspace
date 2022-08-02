@@ -4,12 +4,12 @@
     "type": "split",
     "children": [
       {
-        "id": "61ecff600081638b",
+        "id": "94951af1bfde477e",
         "type": "leaf",
         "state": {
           "type": "markdown",
           "state": {
-            "file": "STL/01 容器.md",
+            "file": "CMake/cmake-commands.md",
             "mode": "source",
             "source": false
           }
@@ -69,7 +69,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "STL/01 容器.md",
+                "file": "CMake/cmake-commands.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -95,37 +95,26 @@
               "type": "advanced-tables-toolbar",
               "state": {}
             }
-          },
-          {
-            "id": "58450d6886ecb217",
-            "type": "leaf",
-            "state": {
-              "type": "tag",
-              "state": {
-                "sortOrder": "frequency",
-                "useHierarchy": true
-              }
-            }
           }
         ],
-        "currentTab": 2
+        "currentTab": 1
       }
     ],
     "direction": "horizontal",
     "width": 300,
     "collapsed": true
   },
-  "active": "61ecff600081638b",
+  "active": "94951af1bfde477e",
   "lastOpenFiles": [
-    "STL/01 容器.md",
-    "STL/02.md",
-    "C++/命名规则.md",
+    "CMake/cmake-modules.md",
+    "CMake/cmake-commands.md",
+    "C++/C++ Writer and Reader.md",
     "C++/代码风格.md",
-    "images/Clion Google C++ Style.png",
-    "images/Pasted image 20220607060445.png",
+    "C++/C++ unique_ptr.md",
+    "C++/C++ std move.md",
+    "C++/命名规则.md",
+    "C++/README.md",
     "C++/Google Test.md",
-    "C++/enum.md",
-    "C++/default keyword.md",
-    "C++/C++ Writer and Reader.md"
+    "C++/enum.md"
   ]
 }

@@ -4,7 +4,6 @@
   "switcher",
   "graph",
   "backlink",
-  "tag-pane",
   "page-preview",
   "daily-notes",
   "note-composer",
@@ -12,6 +11,5 @@
   "editor-status",
   "markdown-importer",
   "word-count",
-  "open-with-default-app",
   "file-recovery"
 ]

@@ -2,8 +2,8 @@
   "translucency": false,
   "interfaceFontFamily": "LXGW Wenkai,Lora",
   "textFontFamily": "Lora,LXGW Wenkai",
-  "monospaceFontFamily": "Source Code Pro,LXGW Wenkai",
-  "baseFontSize": 33,
+  "monospaceFontFamily": "Lora,LXGW Wenkai",
+  "baseFontSize": 30,
   "cssTheme": "Things",
   "theme": "moonstone",
   "baseFontSizeAction": true

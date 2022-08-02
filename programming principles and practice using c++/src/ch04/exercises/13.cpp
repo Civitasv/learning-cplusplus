@@ -2,8 +2,11 @@
 
 void ch04_exercises_13(int max)
 {
-    bool prime[max + 1];
+    bool *prime = new bool[max + 1];
+
+    // initialize array prime to true
     memset(prime, true, sizeof(prime));
+
     for (int p = 2; p * p <= max; p++)
     {
         if (prime[p])
@@ -16,4 +19,5 @@ void ch04_exercises_13(int max)
     for (int p = 2; p <= max; p++)
         if (prime[p])
             cout << p << " ";
+    delete prime;
 }
