@@ -1,5 +1,5 @@
 #include <iostream>
-#include "Test.h"
+#include "test/pub/Test.h"
 
 int main() {
   TestModule::LoadLibrary();

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../../lib/pub/linux/RePlex.h"
+#include "lib/pub/linux/RePlex.h"
 
 // This line prevents C++ name mangling which would prevent dlsym from retrieving
 // the correct symbols.

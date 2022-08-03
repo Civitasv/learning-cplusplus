@@ -41,7 +41,6 @@ class RePlexModule {
 
  private:
   void Load() {
-    std::cout << GetPath() << std::endl;
     m_libHandle = dlopen(GetPath(), RTLD_NOW);
     if (m_libHandle) {
       LoadSymbols();
