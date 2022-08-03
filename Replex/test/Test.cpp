@@ -1,9 +1,8 @@
 #include "Test.h"
 #include <cstdio>
 
-void foo()
-{
-    printf("Hi\n");
+void foo() {
+  printf("Hi\n");
 }
 
-int bar = 40;
+int bar = 20;
