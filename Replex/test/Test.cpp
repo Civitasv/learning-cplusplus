@@ -6,4 +6,4 @@ void foo()
     printf("Hi\n");
 }
 
-int bar = 4;
+int bar = 40;

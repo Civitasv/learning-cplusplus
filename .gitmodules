@@ -1,0 +1,3 @@
+[submodule "Replex/googletest"]
+	path = Replex/googletest
+	url = git@github.com:google/googletest.git
