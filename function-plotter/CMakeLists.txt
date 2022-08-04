@@ -1,6 +1,6 @@
-cmake_minimum_required(VERSION 3.23)
+cmake_minimum_required(VERSION 3.20)
 project(function_plotter)
 
 set(CMAKE_CXX_STANDARD 17)
 
-add_executable(function_plotter main.cpp)
+add_subdirectory(src)
