@@ -12,3 +12,6 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 add_subdirectory(lib)
 add_subdirectory(runtime)
 add_subdirectory(test)
+
+# Test
+add_subdirectory(googletest)

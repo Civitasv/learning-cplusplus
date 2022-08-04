@@ -6,7 +6,7 @@
 // the correct symbols.
 extern "C"
 {
-void foo();
+int foo(int x);
 
 // The extern keyword here exports a global variable that will be defined in Test.cpp
 extern int bar;
@@ -20,8 +20,8 @@ class TestModule : public RePlexModule<TestModule, g_exports.size()> {
  public:
   TestModule() : RePlexModule(g_exports) {}
 
-  static void Foo() {
-    GetInstance().Execute<0, void>();
+  static int Foo(int x) {
+    return GetInstance().Execute<0, int, int>(x);
   }
 
   static int GetBar() {
@@ -29,8 +29,8 @@ class TestModule : public RePlexModule<TestModule, g_exports.size()> {
   }
 
  protected:
-  virtual const char* GetPath() const override {
-    const char* g_libPath = "/mnt/d/workflow/learning-cplusplus/Replex/cmake-build-debug-wsl/library/libRePlexTest.so";
+  const char* GetPath() const override {
+    const char* g_libPath = "/home/civitasv/Documents/workflow/Learning/learning-cplusplus/Replex/cmake-build-debug/library/libRePlexTest.so";
     return g_libPath;
   }
 };
