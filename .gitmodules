@@ -4,3 +4,6 @@
 [submodule "function-plotter"]
 	path = function-plotter
 	url = git@github.com:Civitasv/asciichart.git
+[submodule "please"]
+	path = please
+	url = git@github.com:Civitasv/please.git
