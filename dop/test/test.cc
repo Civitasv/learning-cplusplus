@@ -1,6 +1,8 @@
 #include "include/test.h"
+#include <Windows.h>
+#include <iostream>
+#include <string>
 
-#include <string> 
-int test(){
-    std::cout << "Hello";
-}
+int main() { test(); }
+
+void test() { std::cout << "Hello"; }
