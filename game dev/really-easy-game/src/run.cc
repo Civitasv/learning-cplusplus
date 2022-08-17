@@ -5,7 +5,7 @@
 
 #include "include/render_window.h"
 
-int main(int argc, char *argv[]) {
+int main(int argc, char* argv[]) {
   if (SDL_Init(SDL_INIT_VIDEO) < 0) {
     std::cout << "HEY.. SDL_Init FAILED: " << SDL_GetError() << std::endl;
   }
@@ -14,6 +14,9 @@ int main(int argc, char *argv[]) {
   }
 
   RenderWindow window("Game v1.0", 1280, 720);
+
+  SDL_Texture* grass_texture = window.LoadTexture("res/gfx/ground_grass_1.png");
+
   bool game_running = true;
   SDL_Event event;
 
@@ -23,6 +26,9 @@ int main(int argc, char *argv[]) {
       if (event.type == SDL_QUIT) {
         game_running = false;
       }
+      window.Clear();
+      window.Render(grass_texture);
+      window.Display();
     }
   }
 
