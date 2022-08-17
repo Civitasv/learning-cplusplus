@@ -5,12 +5,24 @@
 
 class Entity {
  public:
-  Entity(double p_x, double p_y, SDL_Texture* p_tex);
+  Entity(float x, float y, SDL_Texture* tex);
+
+  float x();
+  float y();
+
+  SDL_Texture* tex();
+  SDL_Rect current_frame();
 
  private:
-  double x;
-  double y;
-  SDL_Texture* tex;
+  // Coordinate x that texture will be displayed.
+  float x_;
 
-  SDL_Rect current_frame;
+  // Coordinate y that texture will be displayed.
+  float y_;
+
+  // Displayed texture.
+  SDL_Texture* tex_;
+
+  // Pos and Size of current texture.
+  SDL_Rect current_frame_;
 };

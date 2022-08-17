@@ -3,6 +3,7 @@
 
 #include <iostream>
 
+#include "include/entity.h"
 #include "include/render_window.h"
 
 int main(int argc, char* argv[]) {
@@ -17,6 +18,8 @@ int main(int argc, char* argv[]) {
 
   SDL_Texture* grass_texture = window.LoadTexture("res/gfx/ground_grass_1.png");
 
+  Entity platform0(300, 300, grass_texture);
+
   bool game_running = true;
   SDL_Event event;
 
@@ -27,7 +30,7 @@ int main(int argc, char* argv[]) {
         game_running = false;
       }
       window.Clear();
-      window.Render(grass_texture);
+      window.Render(platform0);
       window.Display();
     }
   }

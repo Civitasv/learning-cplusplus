@@ -3,16 +3,18 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 
+#include "include/entity.h"
+
 class RenderWindow {
  public:
-  RenderWindow(const char *p_title, int p_w, int p_h);
+  RenderWindow(const char *title, int w, int h);
 
-  SDL_Texture *LoadTexture(const char *p_filepath);
+  SDL_Texture *LoadTexture(const char *filepath);
 
   /// Clear Texture
   void Clear();
   /// Render Texture
-  void Render(SDL_Texture *p_tex);
+  void Render(Entity &entity);
   /// Display Texture
   void Display();
 
@@ -20,6 +22,6 @@ class RenderWindow {
   void CleanUp();
 
  private:
-  SDL_Window *window;
-  SDL_Renderer *render;
+  SDL_Window *window_;
+  SDL_Renderer *render_;
 };
