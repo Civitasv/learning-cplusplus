@@ -1,4 +1,4 @@
-add_executable(easygame run.cc render_window.cc)
+add_executable(easygame run.cc render_window.cc entity.cc)
 
 target_include_directories(easygame PUBLIC
     $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}>)

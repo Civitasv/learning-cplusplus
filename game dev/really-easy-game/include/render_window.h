@@ -9,10 +9,14 @@ class RenderWindow {
 
   SDL_Texture *LoadTexture(const char *p_filepath);
 
+  /// Clear Texture
   void Clear();
+  /// Render Texture
   void Render(SDL_Texture *p_tex);
+  /// Display Texture
   void Display();
 
+  // CleanUp window, you cannot leak my memory!
   void CleanUp();
 
  private:

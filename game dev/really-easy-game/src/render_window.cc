@@ -5,6 +5,8 @@
 
 #include <iostream>
 
+#include "include/entity.h"
+
 RenderWindow::RenderWindow(const char *p_title, int p_w, int p_h)
     : window(nullptr), render(nullptr) {
   window =
@@ -32,7 +34,21 @@ SDL_Texture *RenderWindow::LoadTexture(const char *p_filepath) {
 
 void RenderWindow::Clear() { SDL_RenderClear(render); }
 void RenderWindow::Render(SDL_Texture *p_tex) {
-  SDL_RenderCopy(render, p_tex, nullptr, nullptr);
+  // Describe size of texture.
+  SDL_Rect src;
+  src.x = 0;
+  src.y = 0;
+  src.w = 32;
+  src.h = 32;
+
+  // Describe how we want to display the texture.
+  SDL_Rect dst;
+  dst.x = 0;
+  dst.y = 0;
+  dst.w = 32;
+  dst.h = 32;
+
+  SDL_RenderCopy(render, p_tex, &src, &dst);
 }
 
 void RenderWindow::Display() { SDL_RenderPresent(render); }
