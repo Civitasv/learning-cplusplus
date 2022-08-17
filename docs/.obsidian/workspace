@@ -9,7 +9,7 @@
         "state": {
           "type": "markdown",
           "state": {
-            "file": "C++/命名规则.md",
+            "file": "C++/nullptr vs null.md",
             "mode": "source",
             "source": false
           }
@@ -53,8 +53,7 @@
       }
     ],
     "direction": "horizontal",
-    "width": 332.5,
-    "collapsed": true
+    "width": 332.5
   },
   "right": {
     "id": "94d74886e9927f0e",
@@ -70,7 +69,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "C++/命名规则.md",
+                "file": "C++/nullptr vs null.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -107,6 +106,7 @@
   },
   "active": "94951af1bfde477e",
   "lastOpenFiles": [
+    "C++/命名规则.md",
     "C++/代码风格.md",
     "STL/01 容器.md",
     "CMake/cmake-generator-expressions.md",
@@ -115,7 +115,6 @@
     "CMake/cmake-modules.md",
     "C++/Google Test.md",
     "C++/README.md",
-    "C++/enum.md",
-    "C++/default keyword.md"
+    "C++/enum.md"
   ]
 }
