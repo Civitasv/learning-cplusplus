@@ -10,6 +10,7 @@ class Snake {
   Snake() : x(-1), y(-1), size(-1), x_step(0), y_step(0), total(0), tails({}) {}
   Snake(int x, int y, int size)
       : x(x), y(y), size(size), x_step(1), y_step(0), total(0), tails({}) {}
+
   int x;  // x location of snake
   int y;  // y location of snake
 
@@ -19,16 +20,22 @@ class Snake {
   int size;
   int total;
 
+  SDL_Texture* header_tex;
+  SDL_Texture* tails_tex;
+
   std::vector<std::pair<int, int>> tails;
 
   void Update() {
-    for (int i = 0; i < total - 1; i++) {
-      tails[i] = tails[i + 1];
+    if (total == tails.size()) {
+      for (int i = 0; i < total - 1; i++) {
+        tails[i] = tails[i + 1];
+      }
+      if (total > 0) {
+        tails[total - 1] = {x, y};
+      }
+    } else {
+      tails.push_back({x, y});
     }
-    if (total > 0) {
-      tails[total - 1] = {x, y};
-    }
-
     x = x + x_step;
     y = y + y_step;
   }
@@ -48,29 +55,32 @@ class Snake {
   bool Eat(Food& food) {
     if (x == food.x && y == food.y) {
       total++;
-      tails.push_back({x, y});
       return true;
     }
     return false;
   }
 
-  void Death(int rows, int cols) {
+  bool Death(int rows, int cols) {
     // if touch itself
     for (auto& tail : tails) {
       if (tail.first == x && tail.second == y) {
         total = 0;
         tails.clear();
+        return true;
       }
     }
     // if touch wall
-    if (x == -1 || y == -1 || x == cols || y == rows) {
+    if (x == 0 || y == 0 || x == cols - 1 || y == rows - 1) {
       total = 0;
       tails.clear();
-      x = 0;
-      y = 0;
+      x = 1;
+      y = 1;
       x_step = 1;
       y_step = 0;
+      return true;
     }
+
+    return false;
   }
 
  private:
