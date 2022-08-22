@@ -9,6 +9,7 @@
 
 class RenderWindow {
  public:
+  RenderWindow() {}
   RenderWindow(const char *title, int w, int h, int left, int top);
 
   SDL_Texture *LoadTexture(const char *filepath);

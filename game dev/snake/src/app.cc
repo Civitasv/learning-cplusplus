@@ -11,13 +11,30 @@
 #include "include/snake.h"
 
 App::App()
-    : running(true),
-      pause(false),
-      cols(30),
-      rows(15),
-      size(20),
-      score(0),
-      window({"Snake", 1280, 720, 300, 200}) {
+    : running(true), pause(false), cols(30), rows(15), size(20), score(0) {}
+
+void App::PickFoodLocation() {
+  std::random_device dev;
+  std::mt19937 rng(dev());
+  std::uniform_int_distribution<std::mt19937::result_type> a(1, rows - 2);
+  std::uniform_int_distribution<std::mt19937::result_type> b(1, cols - 2);
+
+  food.y = a(rng);
+  food.x = b(rng);
+}
+
+bool App::OnInitialize() {
+  if (SDL_Init(SDL_INIT_EVERYTHING) < 0) {
+    std::cout << "HEY.. SDL_Init FAILED: " << SDL_GetError() << std::endl;
+    return false;
+  }
+  if (!(IMG_Init(IMG_INIT_PNG))) {
+    std::cout << "HEY.. IMG_Init FAILED: " << SDL_GetError() << std::endl;
+    return false;
+  }
+
+  window = {"Snake", 1280, 720, 300, 200};
+
   header_tex = window.LoadTexture("res/gfx/header.png");
   tails_tex = window.LoadTexture("res/gfx/tails.png");
   food_tex = window.LoadTexture("res/gfx/food.png");
@@ -52,28 +69,6 @@ App::App()
     bricks.push_back({0, y, size, brick_tex});
     bricks.push_back({cols - 1, y, size, brick_tex});
   }
-}
-
-void App::PickFoodLocation() {
-  std::random_device dev;
-  std::mt19937 rng(dev());
-  std::uniform_int_distribution<std::mt19937::result_type> a(1, rows - 2);
-  std::uniform_int_distribution<std::mt19937::result_type> b(1, cols - 2);
-
-  food.y = a(rng);
-  food.x = b(rng);
-}
-
-bool App::OnInitialize() {
-  if (SDL_Init(SDL_INIT_EVERYTHING) < 0) {
-    std::cout << "HEY.. SDL_Init FAILED: " << SDL_GetError() << std::endl;
-    return false;
-  }
-  if (!(IMG_Init(IMG_INIT_PNG))) {
-    std::cout << "HEY.. IMG_Init FAILED: " << SDL_GetError() << std::endl;
-    return false;
-  }
-
   return true;
 }
 
