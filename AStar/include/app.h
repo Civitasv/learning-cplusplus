@@ -6,6 +6,7 @@
 #include <memory>
 #include <vector>
 
+#include "include/graph.h"
 #include "include/render_window.h"
 
 class App {
@@ -23,6 +24,13 @@ class App {
   bool running;
   bool pause;
   RenderWindow window;
-  
+
+  Graph graph;
+
+  int row;
+  int col;
   int size;
+
+  int start;
+  int end;
 };

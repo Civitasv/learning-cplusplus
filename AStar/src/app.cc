@@ -7,9 +7,17 @@
 #include <memory>
 #include <random>
 
+#include "include/graph.h"
 #include "include/render_window.h"
 
-App::App() : running(true), pause(false), size(20) {}
+App::App()
+    : running(true),
+      pause(false),
+      row(10),
+      col(10),
+      size(80),
+      start(0),
+      end(98) {}
 
 bool App::OnInitialize() {
   if (SDL_Init(SDL_INIT_EVERYTHING) < 0) {
@@ -21,7 +29,50 @@ bool App::OnInitialize() {
     return false;
   }
 
-  window = {"A* Algrorithm", 1280, 720, 300, 200};
+  window = {"A* Algrorithm", 1920, 1080, 0, 0};
+
+  std::vector<Node> nodes;
+  int index = 0;
+  for (int i = 0; i < row; i++) {
+    for (int j = 0; j < col; j++) {
+      // make a node
+      Node node = {index++, {i, j}};
+      nodes.push_back(node);
+    }
+  }
+
+  std::vector<Edge> edges;
+  index = 0;
+  for (int i = 0; i < row; i++) {
+    for (int j = 0; j < col; j++) {
+      Node& node = nodes[i * row + j];
+      // left
+      if (j > 0) {
+        Node& left_node = nodes[i * row + j - 1];
+        Edge edge = {index++, node.id, left_node.id, 1};
+        edges.push_back(edge);
+      }
+      // right
+      if (j < col - 1) {
+        Node& right_node = nodes[i * row + j + 1];
+        Edge edge = {index++, node.id, right_node.id, 1};
+        edges.push_back(edge);
+      }
+      // top
+      if (i > 0) {
+        Node& top_node = nodes[(i - 1) * row + j];
+        Edge edge = {index++, node.id, top_node.id, 1};
+        edges.push_back(edge);
+      }
+      // down
+      if (i < row - 1) {
+        Node& down_node = nodes[(i + 1) * row + j];
+        Edge edge = {index++, node.id, down_node.id, 1};
+        edges.push_back(edge);
+      }
+    }
+  }
+  graph = {nodes, edges};
 
   return true;
 }
@@ -55,15 +106,16 @@ void App::OnLoop() {
   if (pause) {
     return;
   }
+  for (Node& node : graph.nodes) {
+    node.status = 0;
+  }
 }
 
 void App::OnRender() {
   if (pause) {
     return;
   }
-  window.Clear();
-  window.Render();
-  window.Display();
+  graph.BFS(&graph.nodes[start], &graph.nodes[end], &window, size);
 }
 
 void App::OnCleanUp() {
@@ -89,7 +141,7 @@ int App::Run() {
     // 4. Render
     OnRender();
 
-    SDL_Delay(200);
+    SDL_Delay(2000);
   }
 
   // 5. Cleanup

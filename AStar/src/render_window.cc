@@ -31,7 +31,32 @@ SDL_Texture *RenderWindow::LoadTexture(const char *filepath) {
 
 void RenderWindow::Clear() { SDL_RenderClear(render_); }
 
-void RenderWindow::Render() {}
+void RenderWindow::Render(Graph &graph, int size) {
+  Clear();
+  for (auto &node : graph.nodes) {
+    SDL_Rect src;
+    src.x = left + node.p.x * size;
+    src.y = top + node.p.y * size;
+    src.w = size;
+    src.h = size;
+    if (node.status == 0) {
+    } else if (node.status == 1) {
+      SDL_SetRenderDrawColor(render_, 0, 0, 255, 255);
+      SDL_RenderFillRect(render_, &src);
+    } else if (node.status == 2) {
+      SDL_SetRenderDrawColor(render_, 0, 255, 0, 255);
+      SDL_RenderFillRect(render_, &src);
+    } else if (node.status == 3) {
+      SDL_SetRenderDrawColor(render_, 255, 0, 0, 255);
+      SDL_RenderFillRect(render_, &src);
+    }
+
+    SDL_SetRenderDrawColor(render_, 255, 255, 255, 255);
+    SDL_RenderDrawRect(render_, &src);
+  }
+  SDL_SetRenderDrawColor(render_, 0, 0, 0, 255);
+  Display();
+}
 
 void RenderWindow::Display() { SDL_RenderPresent(render_); }
 

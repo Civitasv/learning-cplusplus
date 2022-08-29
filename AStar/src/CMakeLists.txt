@@ -1,4 +1,4 @@
-add_executable(Astar run.cc render_window.cc app.cc)
+add_executable(Astar run.cc render_window.cc app.cc graph.cc)
 
 target_include_directories(Astar PUBLIC
     $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}>)

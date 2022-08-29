@@ -3,6 +3,8 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 
+#include "include/graph.h"
+
 class RenderWindow {
  public:
   RenderWindow() {}
@@ -12,9 +14,9 @@ class RenderWindow {
 
   /// Clear
   void Clear();
-  
+
   // Render
-  void Render();
+  void Render(Graph& graph, int size);
 
   /// Display
   void Display();
