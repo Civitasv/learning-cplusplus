@@ -26,7 +26,9 @@ class App {
   RenderWindow window;
 
   Graph graph;
-
+  std::vector<std::vector<Node>> nodes_vector;
+  int i;
+  
   int row;
   int col;
   int size;

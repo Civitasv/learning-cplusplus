@@ -16,8 +16,9 @@ App::App()
       row(10),
       col(10),
       size(80),
-      start(0),
-      end(98) {}
+      start(45),
+      end(98),
+      i(0) {}
 
 bool App::OnInitialize() {
   if (SDL_Init(SDL_INIT_EVERYTHING) < 0) {
@@ -29,7 +30,7 @@ bool App::OnInitialize() {
     return false;
   }
 
-  window = {"A* Algrorithm", 1920, 1080, 0, 0};
+  window = {"A* Algrorithm", 1920, 1080, 100, 100};
 
   std::vector<Node> nodes;
   int index = 0;
@@ -74,6 +75,7 @@ bool App::OnInitialize() {
   }
   graph = {nodes, edges};
 
+  nodes_vector = graph.AStar(&graph.nodes[start], &graph.nodes[end]);
   return true;
 }
 
@@ -85,12 +87,28 @@ void App::OnEvent(SDL_Event* event) {
     running = false;
   } else if (event->type == SDL_KEYDOWN) {
     SDL_Keycode code = event->key.keysym.sym;
-    if (code == SDLK_LEFT) {
-    }  // left arrow
-    else if (code == SDLK_RIGHT) {
-    }  // right arrow
-    else if (code == SDLK_UP) {
-    }  // up arrow
+    if (code == SDLK_d) {
+      for (auto& node : graph.nodes) {
+        node.status = 0;
+      }
+      nodes_vector = graph.Dijkstra(&graph.nodes[start], &graph.nodes[end]);
+      i = 0;
+    }  // d for dijkstra
+    else if (code == SDLK_b) {
+      for (auto& node : graph.nodes) {
+        node.status = 0;
+      }
+      nodes_vector = graph.BFS(&graph.nodes[start], &graph.nodes[end]);
+      i = 0;
+    }  // b for BFS
+    else if (code == SDLK_a) {
+      for (auto& node : graph.nodes) {
+        node.status = 0;
+      }
+      // a star
+      nodes_vector = graph.AStar(&graph.nodes[start], &graph.nodes[end]);
+      i = 0;
+    }  // a for A*
     else if (code == SDLK_DOWN) {
     }  // down arrow
     else if (code == SDLK_q) {
@@ -106,8 +124,10 @@ void App::OnLoop() {
   if (pause) {
     return;
   }
-  for (Node& node : graph.nodes) {
-    node.status = 0;
+  if (i < nodes_vector.size() - 1) {
+    i += 1;
+  } else {
+    i = 0;
   }
 }
 
@@ -115,7 +135,9 @@ void App::OnRender() {
   if (pause) {
     return;
   }
-  graph.BFS(&graph.nodes[start], &graph.nodes[end], &window, size);
+  window.Clear();
+  window.Render(nodes_vector[i], graph.nodes[start], graph.nodes[end], size);
+  window.Display();
 }
 
 void App::OnCleanUp() {
@@ -141,7 +163,7 @@ int App::Run() {
     // 4. Render
     OnRender();
 
-    SDL_Delay(2000);
+    SDL_Delay(200);
   }
 
   // 5. Cleanup

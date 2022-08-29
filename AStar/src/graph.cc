@@ -1,8 +1,8 @@
 ﻿#include "include/graph.h"
 
-#include "include/render_window.h"
+std::vector<std::vector<Node>> Graph::BFS(Node* start, Node* end) {
+  std::vector<std::vector<Node>> res = {nodes};
 
-void Graph::BFS(Node* start, Node* end, RenderWindow* window, int size) {
   Data data;
   PrepareData(&data);
 
@@ -18,11 +18,6 @@ void Graph::BFS(Node* start, Node* end, RenderWindow* window, int size) {
     frontier.pop();
 
     if (current->id == end->id) {
-      while (!frontier.empty()) {
-        Node* item = frontier.front();
-        item->status = 2;
-        frontier.pop();
-      }
       break;
     }
     for (auto edge : data.edges_per_node[current]) {
@@ -33,8 +28,7 @@ void Graph::BFS(Node* start, Node* end, RenderWindow* window, int size) {
         came_from[node] = current;
       }
     }
-    window->Render(*this, size);
-    SDL_Delay(500);
+    res.push_back(nodes);
   }
 
   // find the path
@@ -45,10 +39,14 @@ void Graph::BFS(Node* start, Node* end, RenderWindow* window, int size) {
   }
 
   start->status = 3;
-  window->Render(*this, size);
+
+  res.push_back(nodes);
+
+  return res;
 }
 
-void Graph::Dijkstra(Node* start, Node* end, RenderWindow* window, int size) {
+std::vector<std::vector<Node>> Graph::Dijkstra(Node* start, Node* end) {
+  std::vector<std::vector<Node>> res = {nodes};
   Data data;
   PrepareData(&data);
 
@@ -77,11 +75,6 @@ void Graph::Dijkstra(Node* start, Node* end, RenderWindow* window, int size) {
     frontier.pop();
 
     if (current.node->id == end->id) {
-      while (!frontier.empty()) {
-        NodeVal item = frontier.top();
-        item.node->status = 2;
-        frontier.pop();
-      }
       break;
     }
 
@@ -98,8 +91,7 @@ void Graph::Dijkstra(Node* start, Node* end, RenderWindow* window, int size) {
         came_from[node] = current.node;
       }
     }
-    window->Render(*this, size);
-    SDL_Delay(500);
+    res.push_back(nodes);
   }
 
   // find the path
@@ -110,10 +102,12 @@ void Graph::Dijkstra(Node* start, Node* end, RenderWindow* window, int size) {
   }
 
   start->status = 3;
-  window->Render(*this, size);
+  res.push_back(nodes);
+  return res;
 }
 
-void Graph::AStar(Node* start, Node* end, RenderWindow* window, int size) {
+std::vector<std::vector<Node>> Graph::AStar(Node* start, Node* end) {
+  std::vector<std::vector<Node>> res = {nodes};
   Data data;
   PrepareData(&data);
 
@@ -142,11 +136,6 @@ void Graph::AStar(Node* start, Node* end, RenderWindow* window, int size) {
     current.node->status = 2;  // 完成处理
 
     if (current.node->id == end->id) {
-      while (!frontier.empty()) {
-        NodeVal item = frontier.top();
-        item.node->status = 2;
-        frontier.pop();
-      }
       break;
     }
 
@@ -163,8 +152,7 @@ void Graph::AStar(Node* start, Node* end, RenderWindow* window, int size) {
         came_from[node] = current.node;
       }
     }
-    window->Render(*this, size);
-    SDL_Delay(500);
+    res.push_back(nodes);
   }
 
   // find the path
@@ -175,5 +163,6 @@ void Graph::AStar(Node* start, Node* end, RenderWindow* window, int size) {
   }
 
   start->status = 3;
-  window->Render(*this, size);
+  res.push_back(nodes);
+  return res;
 }

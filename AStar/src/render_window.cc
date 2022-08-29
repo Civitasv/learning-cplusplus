@@ -31,9 +31,9 @@ SDL_Texture *RenderWindow::LoadTexture(const char *filepath) {
 
 void RenderWindow::Clear() { SDL_RenderClear(render_); }
 
-void RenderWindow::Render(Graph &graph, int size) {
-  Clear();
-  for (auto &node : graph.nodes) {
+void RenderWindow::Render(std::vector<Node> &nodes, Node &start, Node &end,
+                          int size) {
+  for (auto &node : nodes) {
     SDL_Rect src;
     src.x = left + node.p.x * size;
     src.y = top + node.p.y * size;
@@ -54,8 +54,23 @@ void RenderWindow::Render(Graph &graph, int size) {
     SDL_SetRenderDrawColor(render_, 255, 255, 255, 255);
     SDL_RenderDrawRect(render_, &src);
   }
+  // Render start and end
+  SDL_Rect src;
+  src.x = left + start.p.x * size;
+  src.y = top + start.p.y * size;
+  src.w = size;
+  src.h = size;
+  SDL_SetRenderDrawColor(render_, 255, 0, 255, 255);
+  SDL_RenderFillRect(render_, &src);
+
+  src.x = left + end.p.x * size;
+  src.y = top + end.p.y * size;
+  src.w = size;
+  src.h = size;
+  SDL_SetRenderDrawColor(render_, 0, 255, 255, 255);
+  SDL_RenderFillRect(render_, &src);
+
   SDL_SetRenderDrawColor(render_, 0, 0, 0, 255);
-  Display();
 }
 
 void RenderWindow::Display() { SDL_RenderPresent(render_); }

@@ -16,7 +16,7 @@ class RenderWindow {
   void Clear();
 
   // Render
-  void Render(Graph& graph, int size);
+  void Render(std::vector<Node> &nodes, Node &start, Node &end, int size);
 
   /// Display
   void Display();

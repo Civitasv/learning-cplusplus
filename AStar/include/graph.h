@@ -10,8 +10,6 @@
 #include <unordered_set>
 #include <vector>
 
-class RenderWindow;
-
 class Point {
  public:
   Point() : x(0), y(0) {}
@@ -100,9 +98,9 @@ class Graph {
     }
   }
 
-  void BFS(Node* start, Node* end, RenderWindow* window, int size);
+  std::vector<std::vector<Node>> BFS(Node* start, Node* end);
 
-  void Dijkstra(Node* start, Node* end, RenderWindow* window, int size);
+  std::vector<std::vector<Node>> Dijkstra(Node* start, Node* end);
 
-  void AStar(Node* start, Node* end, RenderWindow* window, int size);
+  std::vector<std::vector<Node>> AStar(Node* start, Node* end);
 };
