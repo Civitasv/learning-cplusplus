@@ -5,23 +5,12 @@
 
 #include <iostream>
 #include <memory>
-#include <random>
 
-#include "include/render_window.h"
+#include "include/sdl_handler.h"
 #include "include/snake.h"
 
 App::App()
     : running(true), pause(false), cols(30), rows(15), size(20), score(0) {}
-
-void App::PickFoodLocation() {
-  std::random_device dev;
-  std::mt19937 rng(dev());
-  std::uniform_int_distribution<std::mt19937::result_type> a(1, rows - 2);
-  std::uniform_int_distribution<std::mt19937::result_type> b(1, cols - 2);
-
-  food.y = a(rng);
-  food.x = b(rng);
-}
 
 bool App::OnInitialize() {
   if (SDL_Init(SDL_INIT_EVERYTHING) < 0) {
@@ -33,41 +22,38 @@ bool App::OnInitialize() {
     return false;
   }
 
-  window = {"Snake", 1280, 720, 300, 200};
+  handler = {"Snake", 1280, 720, 300, 200};
 
-  header_tex = window.LoadTexture("res/gfx/header.png");
-  tails_tex = window.LoadTexture("res/gfx/tails.png");
-  food_tex = window.LoadTexture("res/gfx/food.png");
-  brick_tex = window.LoadTexture("res/gfx/brick.png");
-  score_tex = window.LoadTexture("res/gfx/score.png");
-  numbers = {window.LoadTexture("res/gfx/zero.png"),
-             window.LoadTexture("res/gfx/one.png"),
-             window.LoadTexture("res/gfx/two.png"),
-             window.LoadTexture("res/gfx/three.png"),
-             window.LoadTexture("res/gfx/four.png"),
-             window.LoadTexture("res/gfx/five.png"),
-             window.LoadTexture("res/gfx/six.png"),
-             window.LoadTexture("res/gfx/seven.png"),
-             window.LoadTexture("res/gfx/eight.png"),
-             window.LoadTexture("res/gfx/nine.png")};
+  header_tex = handler.LoadTexture("res/gfx/header.png");
+  tails_tex = handler.LoadTexture("res/gfx/tails.png");
+  food_tex = handler.LoadTexture("res/gfx/food.png");
+  brick_tex = handler.LoadTexture("res/gfx/brick.png");
+  score_tex = handler.LoadTexture("res/gfx/score.png");
+  numbers = {handler.LoadTexture("res/gfx/zero.png"),
+             handler.LoadTexture("res/gfx/one.png"),
+             handler.LoadTexture("res/gfx/two.png"),
+             handler.LoadTexture("res/gfx/three.png"),
+             handler.LoadTexture("res/gfx/four.png"),
+             handler.LoadTexture("res/gfx/five.png"),
+             handler.LoadTexture("res/gfx/six.png"),
+             handler.LoadTexture("res/gfx/seven.png"),
+             handler.LoadTexture("res/gfx/eight.png"),
+             handler.LoadTexture("res/gfx/nine.png")};
 
-  snake = {7, 7, size};
-  snake.header_tex = header_tex;
-  snake.tails_tex = tails_tex;
+  snake = {7, 7, size, header_tex, tails_tex, &handler};
 
-  food.size = size;
-  food.tex = food_tex;
-  PickFoodLocation();
+  food = {size, food_tex, &handler};
+  food.PickLocation(rows, cols);
 
   // up and bottom wall
   for (int x = 0; x < cols; x++) {
-    bricks.push_back({x, 0, size, brick_tex});
-    bricks.push_back({x, rows - 1, size, brick_tex});
+    bricks.push_back({x, 0, size, brick_tex, &handler});
+    bricks.push_back({x, rows - 1, size, brick_tex, &handler});
   }
   // left and right wall
   for (int y = 0; y < rows; y++) {
-    bricks.push_back({0, y, size, brick_tex});
-    bricks.push_back({cols - 1, y, size, brick_tex});
+    bricks.push_back({0, y, size, brick_tex, &handler});
+    bricks.push_back({cols - 1, y, size, brick_tex, &handler});
   }
   return true;
 }
@@ -106,7 +92,7 @@ void App::OnLoop() {
     return;
   }
   if (snake.Eat(food)) {
-    PickFoodLocation();
+    food.PickLocation(rows, cols);
     score++;
   }
   snake.Update();
@@ -119,16 +105,16 @@ void App::OnRender() {
   if (pause) {
     return;
   }
-  window.Clear();
+  handler.Clear();
   DrawWall();
   DrawScore();
-  window.Render(food);
-  window.Render(snake);
-  window.Display();
+  food.Render();
+  snake.Render();
+  handler.Display();
 }
 
 void App::OnCleanUp() {
-  window.CleanUp();
+  handler.CleanUp();
   SDL_DestroyTexture(header_tex);
   SDL_DestroyTexture(tails_tex);
   SDL_DestroyTexture(brick_tex);
@@ -142,12 +128,12 @@ void App::OnCleanUp() {
 
 void App::DrawWall() {
   for (Brick& brick : bricks) {
-    window.Render(brick);
+    brick.Render();
   }
 }
 
 void App::DrawScore() {
-  window.Render(cols * (size + 2), 0, score_tex, numbers, score);
+  handler.DrawScore(cols * (size + 2), 0, score_tex, numbers, score);
 }
 
 int App::Run() {

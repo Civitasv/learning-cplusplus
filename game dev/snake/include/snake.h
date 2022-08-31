@@ -4,12 +4,23 @@
 #include <vector>
 
 #include "include/food.h"
+#include "include/sdl_handler.h"
 
 class Snake {
  public:
   Snake() : x(-1), y(-1), size(-1), x_step(0), y_step(0), total(0), tails({}) {}
-  Snake(int x, int y, int size)
-      : x(x), y(y), size(size), x_step(1), y_step(0), total(0), tails({}) {}
+  Snake(int x, int y, int size, SDL_Texture* header_tex, SDL_Texture* tails_tex,
+        SDL_Handler* handler)
+      : x(x),
+        y(y),
+        size(size),
+        x_step(1),
+        y_step(0),
+        total(0),
+        tails({}),
+        header_tex(header_tex),
+        tails_tex(tails_tex),
+        handler(handler) {}
 
   int x;  // x location of snake
   int y;  // y location of snake
@@ -22,6 +33,8 @@ class Snake {
 
   SDL_Texture* header_tex;
   SDL_Texture* tails_tex;
+
+  SDL_Handler* handler;
 
   std::vector<std::pair<int, int>> tails;
 
@@ -81,6 +94,29 @@ class Snake {
     }
 
     return false;
+  }
+
+  void Render() {
+    double angle = x_step == -1   ? 0
+                   : x_step == 1  ? 180
+                   : y_step == 1  ? 270
+                   : y_step == -1 ? 90
+                                  : 0;
+    for (auto& item : tails) {
+      SDL_Rect src{0, 0, 16, 16};
+
+      SDL_Rect dst{handler->left + item.first * size,
+                   handler->top + item.second * size, size, size};
+
+      handler->DrawRectangle(src, dst, tails_tex, angle);
+    }
+
+    // render header
+    SDL_Rect src = {0, 0, 16, 16};
+
+    SDL_Rect dst{handler->left + x * size, handler->top + y * size, size, size};
+
+    handler->DrawRectangle(src, dst, header_tex, angle);
   }
 
  private:

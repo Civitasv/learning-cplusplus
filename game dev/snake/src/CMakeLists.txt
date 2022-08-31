@@ -1,4 +1,4 @@
-add_executable(snake run.cc render_window.cc app.cc)
+add_executable(snake run.cc sdl_handler.cc app.cc)
 
 target_include_directories(snake PUBLIC
     $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}>)
