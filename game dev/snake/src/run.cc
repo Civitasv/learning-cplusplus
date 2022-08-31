@@ -2,5 +2,6 @@
 
 int main(int argc, char* argv[]) {
   App app;
-  return app.Run();
+  app.Run();
+  return 0;
 }

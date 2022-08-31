@@ -14,12 +14,12 @@
 class App {
  public:
   App();
+  ~App();
 
   bool OnInitialize();
   void OnEvent(SDL_Event* event);
   void OnLoop();
   void OnRender();
-  void OnCleanUp();
   int Run();
 
  private:
@@ -27,10 +27,11 @@ class App {
   void DrawScore();
   bool running;
   bool pause;
-  SDL_Handler handler;
-  Snake snake;
-  Food food;
-  std::vector<Brick> bricks;
+
+  std::unique_ptr<SDL_Handler> handler;
+  std::unique_ptr<Snake> snake;
+  std::unique_ptr<Food> food;
+  std::vector<std::unique_ptr<Brick>> bricks;
 
   SDL_Texture* header_tex;
   SDL_Texture* tails_tex;

@@ -10,6 +10,8 @@ class SDL_Handler {
   SDL_Handler() {}
   SDL_Handler(const char *title, int w, int h, int left, int top);
 
+  ~SDL_Handler();
+
   SDL_Texture *LoadTexture(const char *filepath);
 
   /// Clear
@@ -22,9 +24,6 @@ class SDL_Handler {
                  std::vector<SDL_Texture *> numbers_tex, int score);
   /// Display
   void Display();
-
-  // CleanUp handler, you cannot leak my memory!
-  void CleanUp();
 
   int left;
   int top;

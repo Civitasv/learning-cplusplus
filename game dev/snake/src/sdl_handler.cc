@@ -17,6 +17,12 @@ SDL_Handler::SDL_Handler(const char *title, int w, int h, int left, int top)
   render_ = SDL_CreateRenderer(window_, -1, SDL_RENDERER_ACCELERATED);
 }
 
+SDL_Handler::~SDL_Handler() {
+  SDL_DestroyRenderer(render_);
+  SDL_DestroyWindow(window_);
+  std::cout << "CLEAR HANDLER" << '\n';
+}
+
 SDL_Texture *SDL_Handler::LoadTexture(const char *filepath) {
   SDL_Texture *texture = nullptr;
   texture = IMG_LoadTexture(render_, filepath);
@@ -66,7 +72,7 @@ void SDL_Handler::DrawRectangle(SDL_Rect &source, SDL_Rect &dst,
   if (tex != nullptr) {
     SDL_RenderCopy(render_, tex, &source, &dst);
   } else {
-    std::cout << "DrawRectangle: text was nullptr" << std::endl;
+    std::cout << "DrawRectangle: tex was nullptr" << std::endl;
   }
 }
 
@@ -76,15 +82,10 @@ void SDL_Handler::DrawRectangle(SDL_Rect &source, SDL_Rect &dst,
     SDL_RenderCopyEx(render_, tex, &source, &dst, angle, nullptr,
                      SDL_FLIP_NONE);
   } else {
-    std::cout << "DrawRectangle: text was nullptr" << std::endl;
+    std::cout << "DrawRectangleEx: tex was nullptr" << std::endl;
   }
 }
 
 void SDL_Handler::Clear() { SDL_RenderClear(render_); }
 
 void SDL_Handler::Display() { SDL_RenderPresent(render_); }
-
-void SDL_Handler::CleanUp() {
-  SDL_DestroyRenderer(render_);
-  SDL_DestroyWindow(window_);
-}
