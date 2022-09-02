@@ -70,3 +70,7 @@ Test discovery occurs at build time.
 `TEST_SUFFIX suffix`: Similar to `TEST_PREFIX` except the `suffix` is appended to the name of every discovered test case. Both `TEST_PREFIX` and `TEST_SUFFIX` may be specified.
 
 More options see [googletest](https://cmake.org/cmake/help/git-stage/module/GoogleTest.html).
+
+**googletest 默认会打动态链接库，因此执行前需要将 dll 文件（windows）放置到对应的 exe 文件之中，`.dll` 文件和 `.lib` 不咋一起，或许需要打静态库？或许需要某种自动链接的机制，暂时还不知道。**
+
+**但 linux 下虽然也会打动态链接库，但却不需要手动复制，而且动态链接库 `.so` 和 `.a` 文件在一个文件夹里面（也许就是不需要手动复制的原因吧）。**

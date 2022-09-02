@@ -9,7 +9,7 @@
         "state": {
           "type": "markdown",
           "state": {
-            "file": "CMake/target_link_libraries.md",
+            "file": "CMake/CMake GoogleTest.md",
             "mode": "source",
             "source": false
           }
@@ -69,7 +69,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "CMake/target_link_libraries.md",
+                "file": "CMake/CMake GoogleTest.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -106,20 +106,15 @@
   },
   "active": "94951af1bfde477e",
   "lastOpenFiles": [
+    "CMake/googletest.md",
     "CMake/target_include_directories.md",
-    "Game Engine/Project.md",
-    "Game Engine/First.md",
-    "CMake/cmake-commands.md",
     "C++/Visual Studio 入门.md",
-    "CMake/target_include_directories.md",
     "C++/代码风格.md",
     "C++/C++ std move.md",
     "C++/README.md",
     "C++/nullptr vs null.md",
-    "CMake/target_include_directories.md",
     "面试/多态.md",
     "C++/命名规则.md",
-    "STL/01 容器.md",
-    "CMake/cmake-generator-expressions.md"
+    "STL/01 容器.md"
   ]
 }
