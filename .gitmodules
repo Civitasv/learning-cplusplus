@@ -7,3 +7,6 @@
 [submodule "please"]
 	path = please
 	url = git@github.com:Civitasv/please.git
+[submodule "game dev/cengine"]
+	path = game dev/cengine
+	url = git@github.com:Civitasv/cengine.git
