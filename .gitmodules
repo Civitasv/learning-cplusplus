@@ -10,3 +10,6 @@
 [submodule "game dev/cengine"]
 	path = game dev/cengine
 	url = git@github.com:Civitasv/cengine.git
+[submodule "game dev/opengl_series"]
+	path = game dev/opengl_series
+	url = git@github.com:Civitasv/learning-opengl.git
