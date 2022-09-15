@@ -108,20 +108,20 @@ gcc -Iinclude/
 看一个例子。
 
 ```makefile
-run: main.o another.o
-	g++ main.o another.o -o output
+run: run.o hello.o
+	g++ run.o hello.o -o run
 
-main.o: main.cpp
-	g++ -c main.cpp
+run.o: run.cc
+	g++ -c run.cc
 
-another.o: another.cpp
-	g++ -c another.cpp
+hello.o: hello.cc
+	g++ -c hello.cc 
 
 clean:
-	rm *.o output
+	rm run *.o
 ```
 
-注意到，我们并没有使用 `g++ main.cpp another.cpp -o output`，这样做的目的是加快编译速度。
+注意到，我们并没有使用 `g++ run.cc hello.cc -o run`，这样做的目的是加快编译速度。
 
 C++ 的编译流程为：
 1. 预处理：处理所有宏命令
@@ -129,7 +129,7 @@ C++ 的编译流程为：
 3. 汇编器：将汇编语言编译为目标文件，二进制文件
 4. 链接器：将目标文件合在一起生成可执行文件或者库文件
 
-接着我们看一个有外部依赖的例子：
+最后，我们看一个有外部依赖的例子：
 
 ```makefile
 ├─Dependencies

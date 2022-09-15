@@ -53,7 +53,8 @@
       }
     ],
     "direction": "horizontal",
-    "width": 332.5
+    "width": 332.5,
+    "collapsed": true
   },
   "right": {
     "id": "94d74886e9927f0e",
@@ -104,7 +105,7 @@
     "width": 300,
     "collapsed": true
   },
-  "active": "94951af1bfde477e",
+  "active": "f16fe43bdf1b26fb",
   "lastOpenFiles": [
     "OpenGL/README.md",
     "C++/dynamic_cast VS static_cast.md",
