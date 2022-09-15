@@ -1,0 +1,1 @@
+It's a general-purpose polymorphic function wrapper.
