@@ -105,31 +105,34 @@ gcc -Iinclude/
 	
 	**需要注意的是，makefile 并不负责编译，编译是由所执行的命令完成的，比如对于 C/C++，我们还必须使用 gcc 或 clang 编译器，makefile 的最大作用是管理这些命令。**
 
-看一个例子。
+3. 看一个 makefile 的例子。
 
 ```makefile
-run: main.o another.o
-	g++ main.o another.o -o output
+run: run.o hello.o
+	g++ run.o hello.o -o run
 
-main.o: main.cpp
-	g++ -c main.cpp
+run.o: run.cc
+	g++ -c run.cc
 
-another.o: another.cpp
-	g++ -c another.cpp
+hello.o: hello.cc
+	g++ -c hello.cc 
 
 clean:
-	rm *.o output
+	rm run *.o
 ```
 
-注意到，我们并没有使用 `g++ main.cpp another.cpp -o output`，这样做的目的是加快编译速度。
+这样，对于目标 `run.o`，只有 `run.cc` 变了，`make run.o` 才会执行下面的命令，对于目标 `hello.o`，只有 `hello.cc` 变了，`make hello.o` 才会执行下面的命令，`run.o` 或者 `hello.o` 变了，`make run` 会执行下面的命令。
 
-C++ 的编译流程为：
-1. 预处理：处理所有宏命令
-2. 编译器：将源文件编译为汇编语言
-3. 汇编器：将汇编语言编译为目标文件，二进制文件
-4. 链接器：将目标文件合在一起生成可执行文件或者库文件
+`make clean` 则用于清除目标。
 
-接着我们看一个有外部依赖的例子：
+好像不需要讲：
+	C++ 的编译流程为：
+	1. 预处理：处理所有宏命令
+	2. 编译器：将源文件编译为汇编语言
+	3. 汇编器：将汇编语言编译为目标文件，二进制文件
+	4. 链接器：将目标文件合在一起生成可执行文件或者库文件
+
+最后，我们看一个有外部依赖的例子：
 
 ```makefile
 ├─Dependencies
