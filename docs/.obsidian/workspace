@@ -107,14 +107,14 @@
   "active": "94951af1bfde477e",
   "lastOpenFiles": [
     "OpenGL/README.md",
+    "C++/const char 指针 vs char 指针 const.md",
+    "CMake/CMake FetchContent.md",
+    "Game Engine/[.md",
+    "Game Engine/GLFW VS GLEW.md",
+    "CMake/make file.md",
     "C++/dynamic_cast VS static_cast.md",
     "C++/std function.md",
     "C++/C++ Writer and Reader.md",
-    "C++/C++ unique_ptr.md",
-    "C++/C++ std move.md",
-    "C++/default keyword.md",
-    "C++/enum.md",
-    "C++/Google Test.md",
-    "C++/nullptr vs null.md"
+    "C++/C++ unique_ptr.md"
   ]
 }
