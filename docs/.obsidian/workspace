@@ -4,12 +4,12 @@
     "type": "split",
     "children": [
       {
-        "id": "94951af1bfde477e",
+        "id": "dd5485cab87a10de",
         "type": "leaf",
         "state": {
           "type": "markdown",
           "state": {
-            "file": "CMake/讲讲 MakeFile.md",
+            "file": "OpenGL/GLFW VS GLEW.md",
             "mode": "source",
             "source": false
           }
@@ -53,8 +53,7 @@
       }
     ],
     "direction": "horizontal",
-    "width": 332.5,
-    "collapsed": true
+    "width": 332.5
   },
   "right": {
     "id": "94d74886e9927f0e",
@@ -70,7 +69,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "CMake/讲讲 MakeFile.md",
+                "file": "OpenGL/GLFW VS GLEW.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -105,17 +104,17 @@
     "width": 300,
     "collapsed": true
   },
-  "active": "94951af1bfde477e",
+  "active": "f16fe43bdf1b26fb",
   "lastOpenFiles": [
+    "Game Engine/First.md",
     "OpenGL/README.md",
-    "C++/const char 指针 vs char 指针 const.md",
-    "CMake/CMake FetchContent.md",
-    "Game Engine/[.md",
-    "Game Engine/GLFW VS GLEW.md",
-    "CMake/make file.md",
-    "C++/dynamic_cast VS static_cast.md",
+    "CMake/讲讲 MakeFile.md",
+    "C++/C++ 执行流程.md",
+    "C++/代码风格.md",
+    "C++/Visual Studio 入门.md",
     "C++/std function.md",
-    "C++/C++ Writer and Reader.md",
-    "C++/C++ unique_ptr.md"
+    "C++/static VS inline static.md",
+    "Game Engine/Project.md",
+    "CMake/file.md"
   ]
 }
