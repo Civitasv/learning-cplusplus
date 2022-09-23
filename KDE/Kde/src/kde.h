@@ -3,6 +3,8 @@
 #include <string>
 #include <vector>
 
+#define CPUKDE
+
 namespace kde {
 /// 核密度估计根据有限的样本推断总体数据的分布
 /// 对于一维离散数据，结果是一维连续数据分布
@@ -77,9 +79,9 @@ float SD(std::vector<Point>& pts, Point& avePt);
 
 float Dm(std::vector<Point>& pts, Point& avePt);
 
-KDEResult* kde(std::vector<Point>& pts, Rect& rect, int width, int height);
+KDEResult* CPUKde(std::vector<Point>& pts, Rect& rect, int width, int height);
 
-void Draw(KDEResult* res);
+KDEResult* GPUKde(std::vector<Point>& pts, Rect& rect, int width, int height);
 
-void Start();
+KDEResult* Calculate();
 }  // namespace kde

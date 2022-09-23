@@ -7,3 +7,6 @@ OpenGL Shader:
 1. compile
 2. link
 
+index buffer: 用于更有效地利用内存
+
+vertex array object 里面包括 index buffer object，vertex buffer object 以及 vertex layout 里面的数据，可以通过绑定 vertex array object 绑定 index buffer object 和 vertex buffer object 和 vertex layout。

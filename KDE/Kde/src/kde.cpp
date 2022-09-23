@@ -9,8 +9,6 @@
 #include <iostream>
 #include <sstream>
 
-#include "GLFW/glfw3.h"
-
 namespace kde {
 std::pair<std::vector<Point>, Rect> Coordinates(const std::string& filepath) {
   std::vector<Point> res;
@@ -85,7 +83,7 @@ float Dm(std::vector<Point>& pts, Point& avePt) {
   return distance[distance.size() / 2];
 }
 
-KDEResult* kde(std::vector<Point>& pts, Rect& rect, int width, int height) {
+KDEResult* CPUKde(std::vector<Point>& pts, Rect& rect, int width, int height) {
   using namespace std::chrono;
   float max = -INFINITY, min = INFINITY;
 
@@ -126,60 +124,79 @@ KDEResult* kde(std::vector<Point>& pts, Rect& rect, int width, int height) {
   }
   auto stop = high_resolution_clock::now();
   auto duration = duration_cast<milliseconds>(stop - start);
-  std::cout << "TIME:: " << duration.count() << std::endl;
+  std::cout << "CALCULATION TIME:: " << duration.count() << std::endl;
   res->max = max;
   res->min = min;
   return res;
 }
 
-void Draw(KDEResult* res) {
-  float max = res->max, min = res->min;
-  int height = res->rows, width = res->cols;
-  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-  glMatrixMode(GL_PROJECTION);
-  // 加载单位矩阵
-  glLoadIdentity();
-  glOrtho(0, width, 0, height, -1, 1);
-  glBegin(GL_POINTS);
+KDEResult* GPUKde(std::vector<Point>& pts, Rect& rect, int width, int height) {
+  using namespace std::chrono;
+  float max = -INFINITY, min = INFINITY;
+
+  KDEResult* res = new KDEResult();
+  res->Init(height, width);
+
+  Point avePt = ave(pts);
+  float band_width = h(pts, avePt);
+  rect.top += band_width;
+  rect.bottom -= band_width;
+  rect.left -= band_width;
+  rect.right += band_width;
+
+  float item_w = (rect.right - rect.left) / width;
+  float item_h = (rect.top - rect.bottom) / height;
+  Point mid;
+
+  auto start = high_resolution_clock::now();
   for (int x = 0; x < width; x++) {
+    float item_x = rect.left + item_w * x;
+
     for (int y = 0; y < height; y++) {
-      float val = (res->estimate[y][x] - min) / (max - min);
-      if (val == 0) {
-        glColor3d(1, 1, 1);
-      } else if (val > 0 && val < 0.4) {
-        glColor3d(1, 1, 0);
-      } else if (val >= 0.4 && val < 0.7) {
-        glColor3d(0, 1, 0);
-      } else if (val >= 0.7 && val < 0.9) {
-        glColor3d(0, 0, 1);
-      } else if (val >= 0.9 && val <= 1) {
-        glColor3d(1, 0, 0);
+      float item_y = rect.bottom + item_h * y;
+      float f_estimate = 0;
+      mid.lon = item_x;
+      mid.lat = item_y;
+      for (int m = 0; m < pts.size(); m++) {
+        float distance = Dist(pts[m], mid);
+        if (distance < band_width * band_width) {
+          f_estimate += kernel(distance / band_width);
+        }
       }
-      glVertex2d(x, y);
+      f_estimate = f_estimate / (pts.size() * band_width * band_width);
+      min = std::min(f_estimate, min);
+      max = std::max(f_estimate, max);
+      res->estimate[y][x] = f_estimate;
     }
   }
-  glEnd();
-  glPopMatrix();
-  // 刷新
-  glFlush();
+  auto stop = high_resolution_clock::now();
+  auto duration = duration_cast<milliseconds>(stop - start);
+  std::cout << "CALCULATION TIME:: " << duration.count() << std::endl;
+  res->max = max;
+  res->min = min;
+  return res;
 }
 
-void Start() {
+KDEResult* Calculate() {
   // 1. Read file
   auto data = Coordinates("res/data/coord.txt");
   auto pts = data.first;
   auto rect = data.second;
   // 2. Calculate kde
-  int width = 1000;
+  int width = 20000;
   int height =
       floor(width * (rect.top - rect.bottom) / (rect.right - rect.left));
   static KDEResult* res;
 
   if (res == nullptr) {
-    res = kde(pts, rect, width, height);
+#ifdef CPUKDE
+    res = CPUKde(pts, rect, width, height);
+#else
+    res = GPUKde(pts, rect, width, height);
+#endif
   }
 
-  // 3. Plot
-  Draw(res);
+  // 3. Return and let renderer to plot
+  return res;
 }
 }  // namespace kde
