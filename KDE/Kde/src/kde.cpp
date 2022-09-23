@@ -9,6 +9,8 @@
 #include <iostream>
 #include <sstream>
 
+#include "bs_thread_pool/BS_thread_pool.hpp"
+
 namespace kde {
 std::pair<std::vector<Point>, Rect> Coordinates(const std::string& filepath) {
   std::vector<Point> res;
@@ -124,9 +126,70 @@ KDEResult* CPUKde(std::vector<Point>& pts, Rect& rect, int width, int height) {
   }
   auto stop = high_resolution_clock::now();
   auto duration = duration_cast<milliseconds>(stop - start);
-  std::cout << "CALCULATION TIME:: " << duration.count() << std::endl;
+  std::cout << "CALCULATION TIME:: " << duration.count() << " ms" << std::endl;
   res->max = max;
   res->min = min;
+  return res;
+}
+
+KDEResult* CPUKdeMultiThread(std::vector<Point>& pts, Rect& rect, int width,
+                             int height) {
+  using namespace std::chrono;
+  float max = -INFINITY, min = INFINITY;
+
+  KDEResult* res = new KDEResult();
+  res->Init(height, width);
+
+  Point avePt = ave(pts);
+  float band_width = h(pts, avePt);
+  rect.top += band_width;
+  rect.bottom -= band_width;
+  rect.left -= band_width;
+  rect.right += band_width;
+
+  float item_w = (rect.right - rect.left) / width;
+  float item_h = (rect.top - rect.bottom) / height;
+
+  auto start = high_resolution_clock::now();
+  BS::thread_pool pool;
+  auto loop = [&rect, &pts, &res, item_w, item_h, height, band_width](
+                  const int a, const int b) {
+    for (int x = a; x < b; x++) {
+      float item_x = rect.left + item_w * x;
+
+      for (int y = 0; y < height; y++) {
+        float item_y = rect.bottom + item_h * y;
+        float f_estimate = 0;
+        for (int m = 0; m < pts.size(); m++) {
+          Point a = pts[m];
+          Point b = {item_x, item_y};
+          float distance = Dist(a, b);
+          if (distance < band_width) {
+            f_estimate += kernel(distance / band_width);
+          }
+        }
+        f_estimate = f_estimate / (pts.size() * band_width * band_width);
+        res->estimate[y][x] = f_estimate;
+      }
+    }
+  };
+
+  pool.parallelize_loop(0, width, loop).wait();
+
+  for (auto& rows : res->estimate) {
+    for (auto& item : rows) {
+      min = std::min(min, item);
+      max = std::max(max, item);
+    }
+  }
+
+  res->max = max;
+  res->min = min;
+
+  auto stop = high_resolution_clock::now();
+  auto duration = duration_cast<milliseconds>(stop - start);
+  std::cout << "CALCULATION TIME:: " << duration.count() << " ms" << std::endl;
+
   return res;
 }
 
@@ -177,13 +240,61 @@ KDEResult* GPUKde(std::vector<Point>& pts, Rect& rect, int width, int height) {
   return res;
 }
 
+KDEResult* GPUKdeMultiThread(std::vector<Point>& pts, Rect& rect, int width,
+                             int height) {
+  using namespace std::chrono;
+  float max = -INFINITY, min = INFINITY;
+
+  KDEResult* res = new KDEResult();
+  res->Init(height, width);
+
+  Point avePt = ave(pts);
+  float band_width = h(pts, avePt);
+  rect.top += band_width;
+  rect.bottom -= band_width;
+  rect.left -= band_width;
+  rect.right += band_width;
+
+  float item_w = (rect.right - rect.left) / width;
+  float item_h = (rect.top - rect.bottom) / height;
+  Point mid;
+
+  auto start = high_resolution_clock::now();
+  for (int x = 0; x < width; x++) {
+    float item_x = rect.left + item_w * x;
+
+    for (int y = 0; y < height; y++) {
+      float item_y = rect.bottom + item_h * y;
+      float f_estimate = 0;
+      mid.lon = item_x;
+      mid.lat = item_y;
+      for (int m = 0; m < pts.size(); m++) {
+        float distance = Dist(pts[m], mid);
+        if (distance < band_width) {
+          f_estimate += kernel(distance / band_width);
+        }
+      }
+      f_estimate = f_estimate / (pts.size() * band_width * band_width);
+      min = std::min(f_estimate, min);
+      max = std::max(f_estimate, max);
+      res->estimate[y][x] = f_estimate;
+    }
+  }
+  auto stop = high_resolution_clock::now();
+  auto duration = duration_cast<milliseconds>(stop - start);
+  std::cout << "CALCULATION TIME:: " << duration.count() << std::endl;
+  res->max = max;
+  res->min = min;
+  return res;
+}
+
 KDEResult* Calculate() {
   // 1. Read file
   auto data = Coordinates("res/data/coord.txt");
   auto pts = data.first;
   auto rect = data.second;
   // 2. Calculate kde
-  int width = 20000;
+  int width = 1000;
   int height =
       floor(width * (rect.top - rect.bottom) / (rect.right - rect.left));
   static KDEResult* res;

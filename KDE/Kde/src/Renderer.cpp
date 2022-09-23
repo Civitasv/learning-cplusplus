@@ -1,5 +1,6 @@
 #include "Renderer.h"
 
+#include <chrono>
 #include <iostream>
 
 #include "Log.h"
@@ -21,6 +22,8 @@ void Renderer::Draw(RendererElement& element) const {
 }
 
 RendererElement Renderer::PrepareData(kde::KDEResult* res) const {
+  using namespace std::chrono;
+  auto start = high_resolution_clock::now();
   std::vector<float> data;
   std::vector<unsigned int> indices;
   int count = 0;
@@ -89,5 +92,8 @@ RendererElement Renderer::PrepareData(kde::KDEResult* res) const {
   vb->Unbind();
   ib->Unbind();
 
+  auto stop = high_resolution_clock::now();
+  auto duration = duration_cast<milliseconds>(stop - start);
+  std::cout << "PREPARE DATA TIME:: " << duration.count() << " ms" << std::endl;
   return {shader, va, vb, ib};
 }

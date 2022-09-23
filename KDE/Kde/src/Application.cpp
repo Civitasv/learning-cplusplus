@@ -73,7 +73,7 @@ int main(void) {
 #endif
       auto stop = high_resolution_clock::now();
       auto duration = duration_cast<microseconds>(stop - start);
-      std::cout << "RENDER TIME:: " << duration.count() << std::endl;
+      std::cout << "RENDER TIME:: " << duration.count() << " Î¢Ãë" << std::endl;
       /* Swap front and back buffers */
       glfwSwapBuffers(window);
       glfwSwapInterval(1);
@@ -81,6 +81,7 @@ int main(void) {
       /* Poll for and process events */
       glfwPollEvents();
     }
+    delete res;
   }
   glfwTerminate();
   return 0;
