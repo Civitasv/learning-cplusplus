@@ -2,6 +2,7 @@
 
 #include <string>
 #include <vector>
+#include "bs_thread_pool/BS_thread_pool.hpp"
 
 #define CPUKDE
 
@@ -80,12 +81,12 @@ float SD(std::vector<Point>& pts, Point& avePt);
 float Dm(std::vector<Point>& pts, Point& avePt);
 
 KDEResult* CPUKde(std::vector<Point>& pts, Rect& rect, int width, int height);
-KDEResult* CPUKdeMultiThread(std::vector<Point>& pts, Rect& rect, int width,
-                             int height);
-
-KDEResult* GPUKde(std::vector<Point>& pts, Rect& rect, int width, int height);
-KDEResult* GPUKdeMultiThread(std::vector<Point>& pts, Rect& rect, int width,
-                             int height);
+//KDEResult* CPUKdeMultiThread(std::vector<Point>& pts, Rect& rect, int width,
+//                             int height);
+//
+//KDEResult* GPUKde(std::vector<Point>& pts, Rect& rect, int width, int height);
+//KDEResult* GPUKdeMultiThread(std::vector<Point>& pts, Rect& rect, int width,
+//                             int height);
 
 KDEResult* Calculate();
 }  // namespace kde

@@ -4,7 +4,7 @@
 #include <sstream>
 #include <string>
 
-//#define LEGACY_OPENGL
+//#define LEGACY_OPENGL // 211 s, debug
 
 #ifdef LEGACY_OPENGL
 #include "LegacyRenderer.h"

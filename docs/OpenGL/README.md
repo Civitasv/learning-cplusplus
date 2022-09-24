@@ -10,3 +10,6 @@ OpenGL Shader:
 index buffer: 用于更有效地利用内存
 
 vertex array object 里面包括 index buffer object，vertex buffer object 以及 vertex layout 里面的数据，可以通过绑定 vertex array object 绑定 index buffer object 和 vertex buffer object 和 vertex layout。
+
+![[Pasted image 20220924100532.png]]
+本来 LEGACY_OPENGL 和 MODERN_OPENGL 时间不一样，修改了这个就一样了...

@@ -9,8 +9,6 @@
 #include <iostream>
 #include <sstream>
 
-#include "bs_thread_pool/BS_thread_pool.hpp"
-
 namespace kde {
 std::pair<std::vector<Point>, Rect> Coordinates(const std::string& filepath) {
   std::vector<Point> res;
@@ -152,8 +150,8 @@ KDEResult* CPUKdeMultiThread(std::vector<Point>& pts, Rect& rect, int width,
 
   auto start = high_resolution_clock::now();
   BS::thread_pool pool;
-  auto loop = [&rect, &pts, &res, item_w, item_h, height, band_width](
-                  const int a, const int b) {
+  auto loop = [&rect, &pts, &res, &min, &max, item_w, item_h, height,
+               band_width](const int a, const int b) {
     for (int x = a; x < b; x++) {
       float item_x = rect.left + item_w * x;
 
@@ -164,24 +162,19 @@ KDEResult* CPUKdeMultiThread(std::vector<Point>& pts, Rect& rect, int width,
           Point a = pts[m];
           Point b = {item_x, item_y};
           float distance = Dist(a, b);
-          if (distance < band_width) {
+          if (distance < band_width * band_width) {
             f_estimate += kernel(distance / band_width);
           }
         }
         f_estimate = f_estimate / (pts.size() * band_width * band_width);
         res->estimate[y][x] = f_estimate;
+        min = std::min(min, f_estimate);
+        max = std::max(max, f_estimate);
       }
     }
   };
 
   pool.parallelize_loop(0, width, loop).wait();
-
-  for (auto& rows : res->estimate) {
-    for (auto& item : rows) {
-      min = std::min(min, item);
-      max = std::max(max, item);
-    }
-  }
 
   res->max = max;
   res->min = min;
@@ -294,18 +287,15 @@ KDEResult* Calculate() {
   auto pts = data.first;
   auto rect = data.second;
   // 2. Calculate kde
-  int width = 1000;
+  int width = 10000;
   int height =
       floor(width * (rect.top - rect.bottom) / (rect.right - rect.left));
-  static KDEResult* res;
 
-  if (res == nullptr) {
 #ifdef CPUKDE
-    res = CPUKde(pts, rect, width, height);
+  KDEResult* res = CPUKdeMultiThread(pts, rect, width, height);
 #else
-    res = GPUKde(pts, rect, width, height);
+  KDEResult* res = GPUKde(pts, rect, width, height);
 #endif
-  }
 
   // 3. Return and let renderer to plot
   return res;
