@@ -4,7 +4,8 @@
 #include <sstream>
 #include <string>
 
-//#define LEGACY_OPENGL // 211 s, debug
+//#define LEGACY_OPENGL // if enable LEGACY OPENGL，如果开启，则使用 OPENGL 立即绘制模式
+#define KDE_USE_GPU_ACCELERATION // if enable GPU Acceleration，包括使用 CUDA 并行计算核密度以及 CUDA 与 OPENGL 的互操作
 
 #ifdef LEGACY_OPENGL
 #include "LegacyRenderer.h"
@@ -51,15 +52,20 @@ int main(void) {
     using namespace kde;
     using namespace std::chrono;
 
-    KDEResult* res = Calculate();
+#ifdef KDE_USE_GPU_ACCELERATION
+    RendererElement element = GPUCalculate();
+#else
+    KDEResult* res = CPUCalculate();
+#endif
 
 #ifdef LEGACY_OPENGL
     LegacyRenderer renderer;
+#elif defined KDE_USE_GPU_ACCELERATION
+    Renderer renderer;
 #else
     Renderer renderer;
-    RendererElement element = renderer.PrepareData(res);
+    RendererElement element = renderer.PrepareDataMultiThread(res);
 #endif
-
     /* Loop until the user closes the window */
     while (!glfwWindowShouldClose(window)) {
       /* Render here */
@@ -68,8 +74,10 @@ int main(void) {
 
 #ifdef LEGACY_OPENGL
       renderer.Draw(res);
+#elif defined KDE_USE_GPU_ACCELERATION
+      renderer.Draw(element, false);
 #else
-      renderer.Draw(element);
+      renderer.Draw(element, true);
 #endif
       auto stop = high_resolution_clock::now();
       auto duration = duration_cast<microseconds>(stop - start);
@@ -81,7 +89,9 @@ int main(void) {
       /* Poll for and process events */
       glfwPollEvents();
     }
+#ifndef KDE_USE_GPU_ACCELERATION
     delete res;
+#endif
   }
   glfwTerminate();
   return 0;

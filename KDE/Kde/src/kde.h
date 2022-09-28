@@ -2,36 +2,15 @@
 
 #include <string>
 #include <vector>
-#include "bs_thread_pool/BS_thread_pool.hpp"
 
-#define CPUKDE
+#include "Point.h"
+#include "Rect.h"
 
 namespace kde {
 /// 核密度估计根据有限的样本推断总体数据的分布
 /// 对于一维离散数据，结果是一维连续数据分布
 /// 对于二维离散数据，结果是二维空间内数据的连续分布
 /// 因此，对这个连续分布进行可视化，即可得到基于核密度估计的热力图形式
-
-class Point {
- public:
-  Point() : lon(0.0), lat(0.0) {}
-  Point(float lon, float lat) : lon(lon), lat(lat) {}
-
-  float lon;
-  float lat;
-};
-
-class Rect {
- public:
-  Rect() : top(-INFINITY), right(-INFINITY), bottom(INFINITY), left(INFINITY) {}
-  Rect(float top, float right, float bottom, float left)
-      : top(top), right(right), bottom(bottom), left(left) {}
-
-  float top;
-  float right;
-  float bottom;
-  float left;
-};
 
 struct KDEResult {
   std::vector<std::vector<float>> estimate;
@@ -74,19 +53,15 @@ float h(std::vector<Point>& pts, Point& avePt);
 /// @return
 Point ave(std::vector<Point>& pts);
 
-float Dist(Point& p1, Point& p2);
+float Dist(const Point& p1, const Point& p2);
 
 float SD(std::vector<Point>& pts, Point& avePt);
 
 float Dm(std::vector<Point>& pts, Point& avePt);
 
 KDEResult* CPUKde(std::vector<Point>& pts, Rect& rect, int width, int height);
-//KDEResult* CPUKdeMultiThread(std::vector<Point>& pts, Rect& rect, int width,
-//                             int height);
-//
-//KDEResult* GPUKde(std::vector<Point>& pts, Rect& rect, int width, int height);
-//KDEResult* GPUKdeMultiThread(std::vector<Point>& pts, Rect& rect, int width,
-//                             int height);
+KDEResult* CPUKdeMultiThread(std::vector<Point>& pts, Rect& rect, int width,
+                             int height);
 
-KDEResult* Calculate();
+KDEResult* CPUCalculate();
 }  // namespace kde

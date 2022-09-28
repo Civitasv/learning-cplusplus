@@ -45,10 +45,10 @@
     <ClCompile Include="src\vendor\stb_image\stb_image.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\Dependencies\GLAD\src\gl.c">
+    <ClCompile Include="src\LegacyRenderer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\LegacyRenderer.cpp">
+    <ClCompile Include="..\Dependencies\GLAD\src\gl.c">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -92,6 +92,13 @@
     <ClInclude Include="src\vendor\bs_thread_pool\BS_thread_pool.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\Point.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Rect.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\CudaKde.cuh" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="res\textures\container.jpg">
@@ -106,5 +113,8 @@
   </ItemGroup>
   <ItemGroup>
     <Text Include="res\data\coord.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <CudaCompile Include="src\CudaKde.cu" />
   </ItemGroup>
 </Project>

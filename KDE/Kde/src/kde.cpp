@@ -9,7 +9,10 @@
 #include <iostream>
 #include <sstream>
 
+#include "bs_thread_pool/BS_thread_pool.hpp"
+
 namespace kde {
+
 std::pair<std::vector<Point>, Rect> Coordinates(const std::string& filepath) {
   std::vector<Point> res;
   std::ifstream in_file(filepath);
@@ -53,7 +56,7 @@ Point ave(std::vector<Point>& pts) {
   return Point(lon / pts.size(), lat / pts.size());
 }
 
-float Dist(Point& p1, Point& p2) {
+float Dist(const Point& p1, const Point& p2) {
   double a = p1.lon - p2.lon;
   double b = p1.lat - p2.lat;
 
@@ -186,102 +189,7 @@ KDEResult* CPUKdeMultiThread(std::vector<Point>& pts, Rect& rect, int width,
   return res;
 }
 
-KDEResult* GPUKde(std::vector<Point>& pts, Rect& rect, int width, int height) {
-  using namespace std::chrono;
-  float max = -INFINITY, min = INFINITY;
-
-  KDEResult* res = new KDEResult();
-  res->Init(height, width);
-
-  Point avePt = ave(pts);
-  float band_width = h(pts, avePt);
-  rect.top += band_width;
-  rect.bottom -= band_width;
-  rect.left -= band_width;
-  rect.right += band_width;
-
-  float item_w = (rect.right - rect.left) / width;
-  float item_h = (rect.top - rect.bottom) / height;
-  Point mid;
-
-  auto start = high_resolution_clock::now();
-  for (int x = 0; x < width; x++) {
-    float item_x = rect.left + item_w * x;
-
-    for (int y = 0; y < height; y++) {
-      float item_y = rect.bottom + item_h * y;
-      float f_estimate = 0;
-      mid.lon = item_x;
-      mid.lat = item_y;
-      for (int m = 0; m < pts.size(); m++) {
-        float distance = Dist(pts[m], mid);
-        if (distance < band_width * band_width) {
-          f_estimate += kernel(distance / band_width);
-        }
-      }
-      f_estimate = f_estimate / (pts.size() * band_width * band_width);
-      min = std::min(f_estimate, min);
-      max = std::max(f_estimate, max);
-      res->estimate[y][x] = f_estimate;
-    }
-  }
-  auto stop = high_resolution_clock::now();
-  auto duration = duration_cast<milliseconds>(stop - start);
-  std::cout << "CALCULATION TIME:: " << duration.count() << std::endl;
-  res->max = max;
-  res->min = min;
-  return res;
-}
-
-KDEResult* GPUKdeMultiThread(std::vector<Point>& pts, Rect& rect, int width,
-                             int height) {
-  using namespace std::chrono;
-  float max = -INFINITY, min = INFINITY;
-
-  KDEResult* res = new KDEResult();
-  res->Init(height, width);
-
-  Point avePt = ave(pts);
-  float band_width = h(pts, avePt);
-  rect.top += band_width;
-  rect.bottom -= band_width;
-  rect.left -= band_width;
-  rect.right += band_width;
-
-  float item_w = (rect.right - rect.left) / width;
-  float item_h = (rect.top - rect.bottom) / height;
-  Point mid;
-
-  auto start = high_resolution_clock::now();
-  for (int x = 0; x < width; x++) {
-    float item_x = rect.left + item_w * x;
-
-    for (int y = 0; y < height; y++) {
-      float item_y = rect.bottom + item_h * y;
-      float f_estimate = 0;
-      mid.lon = item_x;
-      mid.lat = item_y;
-      for (int m = 0; m < pts.size(); m++) {
-        float distance = Dist(pts[m], mid);
-        if (distance < band_width) {
-          f_estimate += kernel(distance / band_width);
-        }
-      }
-      f_estimate = f_estimate / (pts.size() * band_width * band_width);
-      min = std::min(f_estimate, min);
-      max = std::max(f_estimate, max);
-      res->estimate[y][x] = f_estimate;
-    }
-  }
-  auto stop = high_resolution_clock::now();
-  auto duration = duration_cast<milliseconds>(stop - start);
-  std::cout << "CALCULATION TIME:: " << duration.count() << std::endl;
-  res->max = max;
-  res->min = min;
-  return res;
-}
-
-KDEResult* Calculate() {
+KDEResult* CPUCalculate() {
   // 1. Read file
   auto data = Coordinates("res/data/coord.txt");
   auto pts = data.first;
@@ -291,11 +199,7 @@ KDEResult* Calculate() {
   int height =
       floor(width * (rect.top - rect.bottom) / (rect.right - rect.left));
 
-#ifdef CPUKDE
   KDEResult* res = CPUKdeMultiThread(pts, rect, width, height);
-#else
-  KDEResult* res = GPUKde(pts, rect, width, height);
-#endif
 
   // 3. Return and let renderer to plot
   return res;
