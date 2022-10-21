@@ -6,5 +6,6 @@
   "baseFontSize": 30,
   "cssTheme": "Things",
   "theme": "moonstone",
-  "baseFontSizeAction": true
+  "baseFontSizeAction": true,
+  "accentColor": ""
 }
