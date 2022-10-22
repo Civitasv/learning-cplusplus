@@ -4,7 +4,7 @@
     "type": "split",
     "children": [
       {
-        "id": "94951af1bfde477e",
+        "id": "dd5485cab87a10de",
         "type": "leaf",
         "state": {
           "type": "markdown",
@@ -53,7 +53,8 @@
       }
     ],
     "direction": "horizontal",
-    "width": 332.5
+    "width": 332.5,
+    "collapsed": true
   },
   "right": {
     "id": "94d74886e9927f0e",
@@ -69,7 +70,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "Game Engine/First.md",
+                "file": "C++/C++ 执行流程.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -104,17 +105,17 @@
     "width": 300,
     "collapsed": true
   },
-  "active": "94951af1bfde477e",
+  "active": "dd5485cab87a10de",
   "lastOpenFiles": [
-    "CMake/target_link_libraries.md",
-    "CMake/file.md",
-    "CMake/target_include_directories.md",
-    "CMake/CMake GoogleTest.md",
-    "CMake/googletest.md",
-    "C++/Visual Studio 入门.md",
+    "CMake/讲讲 MakeFile.md",
     "C++/代码风格.md",
-    "C++/C++ std move.md",
+    "OpenGL/GLFW VS GLEW.md",
+    "images/cmake[0].png",
+    "C++/Visual Studio 入门.md",
+    "C++/std function.md",
+    "C++/static VS inline static.md",
     "C++/README.md",
-    "C++/nullptr vs null.md"
+    "C++/Google Test.md",
+    "C++/enum.md"
   ]
 }
