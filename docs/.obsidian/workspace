@@ -9,7 +9,7 @@
         "state": {
           "type": "markdown",
           "state": {
-            "file": "CMake/讲讲 MakeFile.md",
+            "file": "Game Engine/First.md",
             "mode": "source",
             "source": false
           }
@@ -53,7 +53,8 @@
       }
     ],
     "direction": "horizontal",
-    "width": 332.5
+    "width": 332.5,
+    "collapsed": true
   },
   "right": {
     "id": "94d74886e9927f0e",
@@ -69,7 +70,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "CMake/讲讲 MakeFile.md",
+                "file": "C++/C++ 执行流程.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -106,6 +107,7 @@
   },
   "active": "dd5485cab87a10de",
   "lastOpenFiles": [
+    "CMake/讲讲 MakeFile.md",
     "C++/代码风格.md",
     "OpenGL/GLFW VS GLEW.md",
     "images/cmake[0].png",
@@ -114,7 +116,6 @@
     "C++/static VS inline static.md",
     "C++/README.md",
     "C++/Google Test.md",
-    "C++/enum.md",
-    "C++/default keyword.md"
+    "C++/enum.md"
   ]
 }
