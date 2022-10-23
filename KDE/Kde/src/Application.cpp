@@ -4,8 +4,10 @@
 #include <sstream>
 #include <string>
 
-//#define LEGACY_OPENGL // if enable LEGACY OPENGL，如果开启，则使用 OPENGL 立即绘制模式
-#define KDE_USE_GPU_ACCELERATION // if enable GPU Acceleration，包括使用 CUDA 并行计算核密度以及 CUDA 与 OPENGL 的互操作
+//#define LEGACY_OPENGL // if enable LEGACY OPENGL，如果开启，则使用 OPENGL
+//立即绘制模式
+#define KDE_USE_GPU_ACCELERATION  // if enable GPU Acceleration，包括使用 CUDA
+// 并行计算核密度以及 CUDA 与 OPENGL 的互操作
 
 #ifdef LEGACY_OPENGL
 #include "LegacyRenderer.h"
@@ -26,7 +28,7 @@ int main(void) {
 #endif
 
   /* Create a windowed mode window and its OpenGL context */
-  window = glfwCreateWindow(640, 480, "Hello World", NULL, NULL);
+  window = glfwCreateWindow(640, 640, "Hello World", NULL, NULL);
   if (!window) {
     glfwTerminate();
     return -1;
@@ -52,25 +54,34 @@ int main(void) {
     using namespace kde;
     using namespace std::chrono;
 
-#ifdef KDE_USE_GPU_ACCELERATION
+     auto start = high_resolution_clock::now();
+
+#ifdef LEGACY_OPENGL
+    KDEResult* res = CPUCalculate();
+#elif defined KDE_USE_GPU_ACCELERATION
     RendererElement element = GPUCalculate();
 #else
     KDEResult* res = CPUCalculate();
 #endif
-
+    //auto start = high_resolution_clock::now();
 #ifdef LEGACY_OPENGL
     LegacyRenderer renderer;
 #elif defined KDE_USE_GPU_ACCELERATION
     Renderer renderer;
 #else
     Renderer renderer;
-    RendererElement element = renderer.PrepareDataMultiThread(res);
+    RendererElement element = renderer.PrepareData(res);
 #endif
+    auto stop = high_resolution_clock::now();
+    auto duration = duration_cast<milliseconds>(stop - start);
+    std::cout << "PREPARE TIME:: " << duration.count() << " ms" << std::endl;
+
     /* Loop until the user closes the window */
     while (!glfwWindowShouldClose(window)) {
+      auto start = high_resolution_clock::now();
+
       /* Render here */
       renderer.Clear();
-      auto start = high_resolution_clock::now();
 
 #ifdef LEGACY_OPENGL
       renderer.Draw(res);
@@ -79,6 +90,7 @@ int main(void) {
 #else
       renderer.Draw(element, true);
 #endif
+
       auto stop = high_resolution_clock::now();
       auto duration = duration_cast<microseconds>(stop - start);
       std::cout << "RENDER TIME:: " << duration.count() << " 微秒" << std::endl;

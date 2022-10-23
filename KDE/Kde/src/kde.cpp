@@ -104,7 +104,7 @@ KDEResult* CPUKde(std::vector<Point>& pts, Rect& rect, int width, int height) {
   float item_h = (rect.top - rect.bottom) / height;
   Point mid;
 
-  auto start = high_resolution_clock::now();
+  //auto start = high_resolution_clock::now();
   for (int x = 0; x < width; x++) {
     float item_x = rect.left + item_w * x;
 
@@ -115,7 +115,7 @@ KDEResult* CPUKde(std::vector<Point>& pts, Rect& rect, int width, int height) {
       mid.lat = item_y;
       for (int m = 0; m < pts.size(); m++) {
         float distance = Dist(pts[m], mid);
-        if (distance < band_width * band_width) {
+        if (distance < band_width) {
           f_estimate += kernel(distance / band_width);
         }
       }
@@ -125,9 +125,9 @@ KDEResult* CPUKde(std::vector<Point>& pts, Rect& rect, int width, int height) {
       res->estimate[y][x] = f_estimate;
     }
   }
-  auto stop = high_resolution_clock::now();
+  /*auto stop = high_resolution_clock::now();
   auto duration = duration_cast<milliseconds>(stop - start);
-  std::cout << "CALCULATION TIME:: " << duration.count() << " ms" << std::endl;
+  std::cout << "CALCULATION TIME:: " << duration.count() << " ms" << std::endl;*/
   res->max = max;
   res->min = min;
   return res;
@@ -136,6 +136,8 @@ KDEResult* CPUKde(std::vector<Point>& pts, Rect& rect, int width, int height) {
 KDEResult* CPUKdeMultiThread(std::vector<Point>& pts, Rect& rect, int width,
                              int height) {
   using namespace std::chrono;
+  //auto start = high_resolution_clock::now();
+
   float max = -INFINITY, min = INFINITY;
 
   KDEResult* res = new KDEResult();
@@ -151,7 +153,6 @@ KDEResult* CPUKdeMultiThread(std::vector<Point>& pts, Rect& rect, int width,
   float item_w = (rect.right - rect.left) / width;
   float item_h = (rect.top - rect.bottom) / height;
 
-  auto start = high_resolution_clock::now();
   BS::thread_pool pool;
   auto loop = [&rect, &pts, &res, &min, &max, item_w, item_h, height,
                band_width](const int a, const int b) {
@@ -165,7 +166,7 @@ KDEResult* CPUKdeMultiThread(std::vector<Point>& pts, Rect& rect, int width,
           Point a = pts[m];
           Point b = {item_x, item_y};
           float distance = Dist(a, b);
-          if (distance < band_width * band_width) {
+          if (distance < band_width) {
             f_estimate += kernel(distance / band_width);
           }
         }
@@ -182,9 +183,9 @@ KDEResult* CPUKdeMultiThread(std::vector<Point>& pts, Rect& rect, int width,
   res->max = max;
   res->min = min;
 
-  auto stop = high_resolution_clock::now();
+ /* auto stop = high_resolution_clock::now();
   auto duration = duration_cast<milliseconds>(stop - start);
-  std::cout << "CALCULATION TIME:: " << duration.count() << " ms" << std::endl;
+  std::cout << "CALCULATION TIME:: " << duration.count() << " ms" << std::endl;*/
 
   return res;
 }
@@ -196,10 +197,11 @@ KDEResult* CPUCalculate() {
   auto rect = data.second;
   // 2. Calculate kde
   int width = 10000;
-  int height =
-      floor(width * (rect.top - rect.bottom) / (rect.right - rect.left));
+  int height = floor(width * 480.0f / 640.0f);
+  /*int height =
+      floor(width * (rect.top - rect.bottom) / (rect.right - rect.left));*/
 
-  KDEResult* res = CPUKdeMultiThread(pts, rect, width, height);
+  KDEResult* res = CPUKde(pts, rect, width, height);
 
   // 3. Return and let renderer to plot
   return res;

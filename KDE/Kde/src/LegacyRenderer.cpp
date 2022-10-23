@@ -18,6 +18,7 @@ void LegacyRenderer::Draw(KDEResult* res) const {
   // º”‘ÿµ•Œªæÿ’Û
   glLoadIdentity();
   glOrtho(0, width, 0, height, -1, 1);
+  
   glBegin(GL_POINTS);
   for (int x = 0; x < width; x++) {
     for (int y = 0; y < height; y++) {

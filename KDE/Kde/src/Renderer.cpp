@@ -28,7 +28,7 @@ void Renderer::Draw(RendererElement& element, bool has_IBO) const {
 
 RendererElement Renderer::PrepareData(kde::KDEResult* res) const {
   using namespace std::chrono;
-  auto start = high_resolution_clock::now();
+  // auto start = high_resolution_clock::now();
   int cols = res->cols, rows = res->rows;
 
   std::vector<float> data(cols * rows * 5);
@@ -102,15 +102,16 @@ RendererElement Renderer::PrepareData(kde::KDEResult* res) const {
   vb->Unbind();
   ib->Unbind();
 
-  auto stop = high_resolution_clock::now();
-  auto duration = duration_cast<milliseconds>(stop - start);
-  std::cout << "PREPARE DATA TIME:: " << duration.count() << " ms" << std::endl;
+  /* auto stop = high_resolution_clock::now();
+   auto duration = duration_cast<milliseconds>(stop - start);
+   std::cout << "PREPARE DATA TIME:: " << duration.count() << " ms" <<
+   std::endl;*/
   return {shader, va, vb, ib};
 }
 
 RendererElement Renderer::PrepareDataMultiThread(kde::KDEResult* res) const {
   using namespace std::chrono;
-  auto start = high_resolution_clock::now();
+  // auto start = high_resolution_clock::now();
   int cols = res->cols, rows = res->rows;
 
   std::vector<float> data(cols * rows * 5);
@@ -128,25 +129,25 @@ RendererElement Renderer::PrepareDataMultiThread(kde::KDEResult* res) const {
         float val = (res->estimate[i][j] - res->min) / (res->max - res->min);
 
         if (val == 0) {
-          data[count + 2] = 1;
-          data[count + 3] = 1;
-          data[count + 4] = 1;
-        } else if (val > 0 && val < 0.4) {
-          data[count + 2] = 1;
-          data[count + 3] = 1;
-          data[count + 4] = 0;
-        } else if (val >= 0.4 && val < 0.7) {
-          data[count + 2] = 0;
-          data[count + 3] = 1;
-          data[count + 4] = 0;
-        } else if (val >= 0.7 && val < 0.9) {
-          data[count + 2] = 0;
-          data[count + 3] = 0;
-          data[count + 4] = 1;
+          data[count + 2] = 255.0f / 255.0f;
+          data[count + 3] = 248.0f / 255.0f;
+          data[count + 4] = 248.0f / 255.0f;
+        } else if (val > 0 && val < 0.2) {
+          data[count + 2] = 158.0f / 255.0f;
+          data[count + 3] = 118.0f / 255.0f;
+          data[count + 4] = 118.0f / 255.0f;
+        } else if (val >= 0.2 && val < 0.5) {
+          data[count + 2] = 128.0f / 255.0f;
+          data[count + 3] = 90.0f / 255.0f;
+          data[count + 4] = 90.0f / 255.0f;
+        } else if (val >= 0.5 && val < 0.9) {
+          data[count + 2] = 129.0f / 255.0f;
+          data[count + 3] = 92.0f / 255.0f;
+          data[count + 4] = 92.0f / 255.0f;
         } else if (val >= 0.9 && val <= 1) {
-          data[count + 2] = 1;
-          data[count + 3] = 0;
-          data[count + 4] = 0;
+          data[count + 2] = 103.0f / 255.0f;
+          data[count + 3] = 91.0f / 255.0f;
+          data[count + 4] = 73.0f / 255.0f;
         }
 
         indices[index] = index;
@@ -184,8 +185,9 @@ RendererElement Renderer::PrepareDataMultiThread(kde::KDEResult* res) const {
   vb->Unbind();
   ib->Unbind();
 
-  auto stop = high_resolution_clock::now();
-  auto duration = duration_cast<milliseconds>(stop - start);
-  std::cout << "PREPARE DATA TIME:: " << duration.count() << " ms" << std::endl;
+  /* auto stop = high_resolution_clock::now();
+   auto duration = duration_cast<milliseconds>(stop - start);
+   std::cout << "PREPARE DATA TIME:: " << duration.count() << " ms" <<
+   std::endl;*/
   return {shader, va, vb, ib};
 }
