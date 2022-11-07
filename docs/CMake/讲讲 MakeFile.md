@@ -73,7 +73,7 @@ gcc -o main main.c -L/usr/local/lib/ -lYARP_OS
 gcc -Iinclude/
 ```
 
-## 脚本
+## 视频脚本
 
 0. 开场
 	大家好啊，今天我将对 makefile 进行简单的介绍。
@@ -170,3 +170,150 @@ clean:
 
 结束语：
 以上是本视频的全部内容，希望能让你对 makefile 有所了解，如果有任何疑问，欢迎在评论区内提出。
+
+## 博客
+
+本文对 makefile 进行简单的介绍。
+
+## 问题引入
+
+首先，为什么需要 makefile，以下面这个 C++ 文件为例：
+
+```c++
+// run.cc
+
+#include <iostream>
+
+int main() {
+  std::cout << "Hello MakeFile!" << '\n';
+  return 0;
+}
+```
+
+我们可以使用 `g++ run.cc -o output` 将源文件编译链接为可执行文件，然后执行`./output` 输出 `Hello MakeFile`。但这样有几个问题：
+1. 每次编译，需要重复编写上述命令；
+2. 随着项目的体量的增加，文件数量会变多，依赖关系会更复杂，难以维护；
+
+MakeFile 则被设计用于解决上述问题。
+
+## MakeFile 语法介绍
+
+makefile 的语法十分简单：
+
+```make
+target ...: prerequisites ...
+	recipe
+	...
+	...
+```
+
+每一个这样的代码块被称为一条规则，用于描述目标名称、目标所依赖的文件和生成目标所需执行的命令。
+
+1. target: 生成的文件名或执行的命令名，如 clean
+2. prerequisite: 目标 target 所依赖的文件
+3. recipe: 生成目标 target 所需执行的命令
+	
+然后，使用 `make` 命令即可编译指定的目标，这样，
+
+1. 无需重复编写命令；
+2. 依赖关系隐含在目标所依赖的文件之中；
+3. 在构建时，`make` 还会自动判断 `makefile` 中的哪些目标需要重新编译，显著减少编译所需的时间。
+	
+**需要注意的是，makefile 并不负责编译，编译是由所执行的命令完成的，比如对于 C/C++，我们还必须使用 GCC或 clang 编译器，makefile 的最大作用是管理这些命令。**
+
+### 默认目标
+
+默认情况下，`make` 执行 makefile 中的第一个目标
+
+要修改构建目标：
+1. 使用参数指定其它目标；
+2. 修改 `.DEFAULT_GOAL` 变量值。
+
+### 伪目标
+
+```make
+clean:
+	rm *.o
+```
+
+伪目标没有依赖，仅用于执行一些命令，如 `clean` 用于删除所有的 `.o` 目标文件。
+
+可以使用 `.PHONY` 显式指示该目标为伪目标。
+
+### 定义变量
+
+MakeFile 中支持定义变量。
+```make
+objects = main.o kbd.o command.o display.o \
+          insert.o search.o files.o utils.o
+
+edit : $(objects)
+        cc -o edit $(objects)
+```
+
+
+## 一个例子
+
+看一个 makefile 的例子。
+
+```makefile
+run: run.o hello.o
+	g++ run.o hello.o -o run
+
+run.o: run.cc
+	g++ -c run.cc
+
+hello.o: hello.cc
+	g++ -c hello.cc 
+
+clean:
+	rm run *.o
+```
+
+这样，对于目标 `run.o`，只有 `run.cc` 变了，`make run.o` 才会执行下面的命令，对于目标 `hello.o`，只有 `hello.cc` 变了，`make hello.o` 才会执行下面的命令，`run.o` 或者 `hello.o` 变了，`make run` 会执行下面的命令。
+
+`make clean` 则用于清除目标。
+
+## 外部依赖
+
+最后，我们看一个有外部依赖的例子，项目文件结构如下。
+
+```makefile
+├─Dependencies
+│  │
+│  └─GLFW
+│      │
+│      ├─include
+│      │  └─GLFW
+│      │      glfw3.h
+│      │      glfw3native.h
+│      │
+│      └─lib
+│          libglfw3.a
+│
+└─OpenGL
+    │
+    └─src
+		Application.cpp
+```
+
+其中 `Application.cpp` 依赖于 `GLFW`，那么，此时根目录 MakeFile 应为：
+
+```makefile
+app: Application.o
+	g++ Application.o -LDependencies/GLFW/lib -lglfw3 -lX11 -lOpenGL -o app
+
+Application.o: OpenGL/src/Application.cpp
+	g++ -IDependencies/GLFW/include -c OpenGL/src/Application.cpp
+
+clean:
+	rm *.o app
+```
+
+其中 `-L` 用于指定链接目录，`-l` 指定链接库，`-I` 指定头文件目录。
+
+## 结语
+
+以上是对 MakeFile 的简单介绍，如果有任何疑问，欢迎留言指出。
+
+视频版链接见：<https://www.bilibili.com/video/BV1j14y1v7hL/>

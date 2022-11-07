@@ -5,6 +5,7 @@
   "monospaceFontFamily": "Lora,LXGW Wenkai",
   "baseFontSize": 30,
   "cssTheme": "Things",
-  "theme": "obsidian",
-  "baseFontSizeAction": true
+  "theme": "moonstone",
+  "baseFontSizeAction": true,
+  "accentColor": ""
 }
