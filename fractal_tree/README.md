@@ -2,10 +2,10 @@
 
 Implementation for <https://www.youtube.com/watch?v=0jjeOYMjmDU> in C++.
 
-## 结果
+## Showcase
 
 ![fractal tree](images/fractal_tree.png)
 
-Left Arrow: 减小角度
+Left Arrow: increase the angle
 
-Right Arrow: 增大角度
+Right Arrow: decrease the angle
