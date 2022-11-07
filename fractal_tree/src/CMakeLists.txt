@@ -1,4 +1,4 @@
-add_executable(fractal_tree run.cc render_window.cc app.cc)
+add_executable(fractal_tree run.cc render_window.cc app.cc fractal.cc)
 
 target_include_directories(fractal_tree PUBLIC
     $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}>)

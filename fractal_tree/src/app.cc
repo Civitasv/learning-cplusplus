@@ -8,9 +8,10 @@
 #include <random>
 
 #include "include/error.h"
+#include "include/fractal.h"
 #include "include/render_window.h"
 
-App::App() : running(true), window("Fractal Tree", 1280, 640) {
+App::App() : running(true), window("Fractal Tree", 1280, 640), d_angle(30) {
   // Init Everything
   if (SDL_Init(SDL_INIT_EVERYTHING) < 0) {
     Error("SDL_Init FAILED:", SDL_GetError());
@@ -29,7 +30,10 @@ void App::OnEvent(SDL_Event* event) {
     running = false;
   } else if (event->type == SDL_KEYDOWN) {
     SDL_Keycode code = event->key.keysym.sym;
-    if (code == SDLK_d) {
+    if (code == SDLK_RIGHT) {
+      d_angle += 2;
+    } else if (code == SDLK_LEFT) {
+      d_angle -= 2;
     }
   }
 }
@@ -39,6 +43,7 @@ void App::OnLoop() {}
 void App::OnRender() {
   window.Clear();
   // Render Here
+  Branch(window, 640, 10, 200, 0, d_angle);
   window.Display();
 }
 
@@ -54,8 +59,6 @@ int App::Run() {
     OnLoop();
     // 3. Render
     OnRender();
-
-    SDL_Delay(200);
   }
 
   return 0;

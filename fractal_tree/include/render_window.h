@@ -5,10 +5,12 @@
 
 class RenderWindow {
  public:
-  RenderWindow() {}
+  RenderWindow() : window(nullptr), render(nullptr) {}
   RenderWindow(const char *title, int w, int h);
 
   ~RenderWindow();
+
+  void RenderLine(int x1, int y1, int x2, int y2);
 
   SDL_Texture *LoadTexture(const char *filepath);
 
@@ -18,7 +20,12 @@ class RenderWindow {
   /// Display
   void Display();
 
+  int GetW() { return w; }
+  int GetH() { return h; }
+
  private:
-  SDL_Window *window_;
-  SDL_Renderer *render_;
+  SDL_Window *window;
+  SDL_Renderer *render;
+  int w;
+  int h;
 };

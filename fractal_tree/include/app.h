@@ -21,4 +21,5 @@ class App {
  private:
   bool running;
   RenderWindow window;
+  int d_angle;
 };
