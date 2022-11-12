@@ -1,4 +1,4 @@
-#include "term/term_image.h"
+﻿#include "term/term_image.h"
 
 #define STB_IMAGE_IMPLEMENTATION
 
@@ -22,7 +22,7 @@ void TermImage::ShowImage(const char* path) {
       if (j != 0) raw_i = i / (height * 1.0f) * raw_height;
 
       ImageInfo item = res[raw_i][raw_j];
-      Text text{"█", style.fg(Foreground::From(RGB(item.r, item.g, item.b)))};
+      Text<std::string> text{"█", style.fg(Foreground::From(RGB(item.r, item.g, item.b)))};
       std::cout << text;
     }
     std::cout << '\n';
