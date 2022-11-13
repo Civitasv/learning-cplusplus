@@ -3,6 +3,10 @@
 #include <vector>
 
 #include "color.h"
+#include "opencv2/highgui.hpp"
+#include "opencv2/imgproc.hpp"
+#include "opencv2/video.hpp"
+#include "opencv2/videoio.hpp"
 #include "text.h"
 
 namespace term {
@@ -16,7 +20,8 @@ struct ImageInfo {
 
 class TermImage {
  public:
-  void ShowImage(const char* path);
+  int ShowImage(const char* path);
+  std::string ShowFrame(cv::Mat& frame);
 
  private:
   std::vector<std::vector<ImageInfo>> ReadImage(const char* path);
