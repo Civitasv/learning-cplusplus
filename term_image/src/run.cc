@@ -22,9 +22,9 @@ void Video() {
   // From https://gist.github.com/itsrifat/66b253db2736b23f247c.
   try {
     // open the video file
-    cv::VideoCapture cap(
-        "D:\\workflow\\learning-cplusplus\\term_image\\images\\berserk."
-        "mp4");           // open the video
+    cv::VideoCapture
+        cap("D:\\workflow\\videos\\term_image\\pr\\素材\\视频\\one more "
+            "time.mp4");  // open the video
                           // file
     if (!cap.isOpened())  // check if we succeeded
       CV_Error(CV_StsError, "Can not open Video file");
