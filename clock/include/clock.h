@@ -18,7 +18,7 @@ void RenderClock(RayWindow& window) {
   int seconds = detailed_time->tm_sec;
 
   // Define center
-  float center_x = 600, center_y = 300;
+  float center_x = window.GetW() / 2.0f, center_y = window.GetH() / 2.0f;
   // Define hour, minute and seconds line length
   int hour_line_length = 80, minute_line_length = 100,
       seconds_line_length = 120;
@@ -46,9 +46,9 @@ void RenderClock(RayWindow& window) {
   }
   {
     // Render Circle
-    for (int radius = 155; radius > 145; radius -= 2)
-      DrawCircleSectorLines({center_x * 1.0f, center_y * 1.0f}, radius, 0, 360,
-                            1, BLACK);
+    int circle_outside = 155, circle_inside = 145;
+    for (float radius = circle_outside; radius > circle_inside; radius -= 2)
+      DrawCircleSectorLines({center_x, center_y}, radius, 0, 360, 1, BLACK);
   }
   {
     // Render pointer
