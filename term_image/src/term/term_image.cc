@@ -6,9 +6,6 @@
 #include "term/text.h"
 
 namespace term {
-std::string&& upper_half_block = "\u2580";
-std::string&& lower_half_block = "\u2584";
-
 int TermImage::ShowImage(const char* path) {
   std::vector<std::vector<ImageInfo>> res = ReadImage(path);
   int raw_height = res.size();
@@ -26,7 +23,7 @@ int TermImage::ShowImage(const char* path) {
 
       ImageInfo item = res[raw_i][raw_j];
       Text<std::string> text{
-          upper_half_block,
+          "██",
           style.fg(Foreground::From(RGB(item.r, item.g, item.b)))};
       std::cout << text;
     }
