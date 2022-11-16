@@ -13,7 +13,7 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "编程工具/fleet.md",
+                "file": "C++/代码风格.md",
                 "mode": "source",
                 "source": false
               }
@@ -77,7 +77,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "编程工具/fleet.md",
+                "file": "C++/代码风格.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -112,13 +112,10 @@
     "width": 300,
     "collapsed": true
   },
-  "ribbon": {
-    "mostRecentAction": ""
-  },
   "active": "273fd21fa8312e6d",
   "lastOpenFiles": [
-    "CMake/讲讲 MakeFile.md",
     "编程工具/fleet.md",
+    "CMake/讲讲 MakeFile.md",
     "STL/01 容器.md",
     "OpenGL/CUDA.md",
     "OpenGL/Pasted image 20220926112419.png",
