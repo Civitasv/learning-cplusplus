@@ -2,7 +2,8 @@
 
 #include "error.h"
 
-RayWindow::RayWindow(const char* title, int w, int h) : w(w), h(h) {
+RayWindow::RayWindow(const char* title, int w, int h) {
+  SetConfigFlags(FLAG_WINDOW_RESIZABLE);
   InitWindow(w, h, title);
 }
 

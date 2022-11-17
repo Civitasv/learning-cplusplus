@@ -13,10 +13,6 @@ class RayWindow {
 
   void End();
 
-  int GetH() { return h; }
-  int GetW() { return w; }
-
- private:
-  int w;
-  int h;
+  int GetW() { return GetScreenWidth(); }
+  int GetH() { return GetScreenHeight(); }
 };
