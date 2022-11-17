@@ -8,8 +8,8 @@
 	path = please
 	url = git@github.com:Civitasv/please.git
 [submodule "game dev/cengine"]
-	path = game dev/cengine
+	path = game_engine/cengine
 	url = git@github.com:Civitasv/cengine.git
 [submodule "game dev/opengl_series"]
-	path = game dev/opengl_series
+	path = game_engine/opengl_series
 	url = git@github.com:Civitasv/learning-opengl.git
