@@ -26,7 +26,7 @@ void App::OnEvent() {
 
 void App::OnRender() {
   window.Begin();
-  ClearBackground(WHITE);
+  ClearBackground(RAYWHITE);
   // Render here
   RenderClock(window);
 

@@ -1,5 +1,6 @@
 #pragma once
 #include <ctime>
+#include <string>
 
 #include "ray_window.h"
 
@@ -19,36 +20,43 @@ void RenderClock(RayWindow& window) {
 
   // Define center
   float center_x = window.GetW() / 2.0f, center_y = window.GetH() / 2.0f;
-  // Define hour, minute and seconds line length
-  int hour_line_length = 80, minute_line_length = 100,
-      seconds_line_length = 120;
-  // Define angle per hour, minute and seconds
-  int hour_factor = 30, minute_factor = 6, seconds_factor = 6;
-  {
-    // Render hour line
-    int dx = hour_line_length * sin(AngleToRadian(hour * hour_factor));
-    int dy = hour_line_length * cos(AngleToRadian(hour * hour_factor));
-    DrawLineEx({center_x, center_y}, {center_x + dx, center_y - dy}, 3.0f,
-               BLACK);
-  }
-  {
-    // Render minute line
-    int dx = minute_line_length * sin(AngleToRadian(minute * minute_factor));
-    int dy = minute_line_length * cos(AngleToRadian(minute * minute_factor));
-    DrawLineEx({center_x, center_y}, {center_x + dx, center_y - dy}, 3.0f,
-               BLACK);
-  }
-  {
-    // Render seconds line
-    int dx = seconds_line_length * sin(AngleToRadian(seconds * seconds_factor));
-    int dy = seconds_line_length * cos(AngleToRadian(seconds * seconds_factor));
-    DrawLineEx({center_x, center_y}, {center_x + dx, center_y - dy}, 3.0f, RED);
-  }
   {
     // Render Circle
     int circle_outside = 155, circle_inside = 145;
-    for (float radius = circle_outside; radius > circle_inside; radius -= 2)
-      DrawCircleSectorLines({center_x, center_y}, radius, 0, 360, 1, BLACK);
+    DrawCircleV({center_x, center_y}, circle_outside, BLACK);
+    DrawCircleV({center_x, center_y}, circle_inside, WHITE);
+    /*for (float radius = circle_outside; radius > circle_inside; radius -= 2)
+      DrawCircleSectorLines({center_x, center_y}, radius, 0, 360, 1, BLACK);*/
+  }
+  {
+    // Define hour, minute and seconds line length
+    int hour_line_length = 60, minute_line_length = 80,
+        seconds_line_length = 100;
+    // Define angle per hour, minute and seconds
+    int hour_factor = 30, minute_factor = 6, seconds_factor = 6;
+    {
+      // Render hour line
+      int dx = hour_line_length * sin(AngleToRadian(hour * hour_factor));
+      int dy = hour_line_length * cos(AngleToRadian(hour * hour_factor));
+      DrawLineEx({center_x, center_y}, {center_x + dx, center_y - dy}, 3.0f,
+                 BLACK);
+    }
+    {
+      // Render minute line
+      int dx = minute_line_length * sin(AngleToRadian(minute * minute_factor));
+      int dy = minute_line_length * cos(AngleToRadian(minute * minute_factor));
+      DrawLineEx({center_x, center_y}, {center_x + dx, center_y - dy}, 3.0f,
+                 BLACK);
+    }
+    {
+      // Render seconds line
+      int dx =
+          seconds_line_length * sin(AngleToRadian(seconds * seconds_factor));
+      int dy =
+          seconds_line_length * cos(AngleToRadian(seconds * seconds_factor));
+      DrawLineEx({center_x, center_y}, {center_x + dx, center_y - dy}, 3.0f,
+                 RED);
+    }
   }
   {
     // Render pointer
