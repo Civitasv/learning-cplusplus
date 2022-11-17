@@ -1,6 +1,6 @@
 #include "app.h"
 
-#include "clock.h"
+#include "ascii_clock.h"
 #include "error.h"
 #include "raylib.h"
 
@@ -28,7 +28,7 @@ void App::OnRender() {
   window.Begin();
   ClearBackground(RAYWHITE);
   // Render here
-  RenderClock(window);
+  RenderAsciiClock(window);
 
   window.End();
 }
