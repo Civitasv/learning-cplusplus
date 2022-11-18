@@ -19,5 +19,4 @@ class App {
   bool is_mouse_button_down;
   int prev_x;
   int prev_y;
-  bool game_start;
 };

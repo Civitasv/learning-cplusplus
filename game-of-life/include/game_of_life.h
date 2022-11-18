@@ -1,4 +1,5 @@
 #pragma once
+#include <algorithm>
 #include <iostream>
 #include <string>
 #include <vector>
@@ -17,12 +18,15 @@ class GameOfLife {
       : rows(rows),
         cols(cols),
         size(size),
-        start_x(0),
-        start_y(0),
         padding(10),
         width_ratio(0.7),
         height_ratio(1.0),
-        cycle(0) {
+        cycle(0),
+        thickness(1.0f),
+        move_x(0.0f),
+        move_y(0.0f),
+        all_dead(false),
+        start(false) {
     Init();
   }
 
@@ -36,9 +40,21 @@ class GameOfLife {
       grids.push_back(grid_row);
     }
     cycle = 0;
+    all_dead = false;
+    thickness = 1.0f;
+    move_x = 0.0f;
+    move_y = 0.0f;
   }
 
   void Render(RayWindow& window) {
+    int can_rows = window.GetH() / size;
+    int can_cols = window.GetW() / size;
+    int start_rows = rows > can_rows ? (rows - can_rows) / 2 : 0;
+    int start_cols = cols > can_cols ? (cols - can_cols) / 2 : 0;
+    int start_x = start_rows * size;
+    int start_y = start_cols * size;
+    render_x = start_x + move_x;
+    render_y = start_y + move_y;
     {
       // Render rule
       DrawText("Press Enter to Start..", window.GetW() * 0.7 + padding,
@@ -59,11 +75,18 @@ class GameOfLife {
                RAYWHITE);
     }
     {
+      // Render game state
+      std::string text = "Game is: ";
+      std::string state_str = start ? "RUNNING" : all_dead ? "END" : "PAUSE";
+      DrawText((text + state_str).c_str(), window.GetW() * 0.7 + padding,
+               window.GetH() * 0.7, 20, RAYWHITE);
+    }
+    {
       // Render current cycle
       std::string text = "Current generation: ";
-      std::string cycle_str = std::to_string(cycle);
+      std::string cycle_str = all_dead ? "ALL DEAD" : std::to_string(cycle);
       DrawText((text + cycle_str).c_str(), window.GetW() * 0.7 + padding,
-               window.GetH() * 0.7, 20, RAYWHITE);
+               window.GetH() * 0.8, 20, RED);
     }
     {
       // Render background
@@ -79,29 +102,30 @@ class GameOfLife {
 
       for (auto& grid_row : grids) {
         for (auto& item : grid_row) {
-          int x = start_x + item.col * size;
-          int y = start_y + item.row * size;
+          int x = item.col * size - render_x;
+          int y = item.row * size - render_y;
           if (!(x >= padding && (x + size) <= width - padding && y >= padding &&
                 (y + size) <= height - padding)) {
             continue;
           }
 
-          DrawRectangleLinesEx({start_x + item.col * size,
-                                start_y + item.row * size, size, size},
-                               1, state_1);
+          DrawRectangleLinesEx({x * 1.0f, y * 1.0f, size, size}, thickness,
+                               state_1);
           if (item.state == 1)
-            DrawRectangle(start_x + item.col * size + 1,
-                          start_y + item.row * size + 1, size - 2, size - 2,
-                          state_2);
+            DrawRectangle(x + 1, y + 1, size - 2, size - 2, state_2);
         }
       }
     }
   }
 
   void Next() {
+    if (all_dead || !start) {
+      return;
+    }
     cycle += 1;
-    std::vector<std::vector<Grid>> next = grids;
+    all_dead = true;
 
+    std::vector<std::vector<Grid>> next = grids;
     for (int i = 0; i < rows; i++) {
       for (int j = 0; j < cols; j++) {
         int sum = 0;
@@ -119,46 +143,81 @@ class GameOfLife {
         // Each cell with one or no neighbors dies, as if by solitude.
         if (state == 1 && (sum == 1 || sum == 0)) {
           next[i][j].state = 0;
+          all_dead = false;
         }
         // Each cell with four or more neighbors dies, as if by overpopulation.
         else if (state == 1 && sum >= 4) {
           next[i][j].state = 0;
+          all_dead = false;
         }
         // Each cell with two or three neighbors survives.
         else if (state == 1 && (sum == 2 || sum == 3)) {
           next[i][j].state = 1;
+          all_dead = false;
         }
         // Each cell with three neighbors becomes populated.
         else if (state == 0 && sum == 3) {
           next[i][j].state = 1;
+          all_dead = false;
         }
       }
     }
     grids = next;
+
+    if (all_dead) {
+      start = false;
+    }
   }
 
   void ToggleState(int x, int y) {
-    int x_ = x - start_x;
-    int y_ = y - start_y;
+    if (start) return;
+    if (all_dead) {
+      // if all grid dead, then set generation to zero
+      // set all dead to false
+      // set thickness to 1.0f
+      // no need to call Init
+      cycle = 0;
+      all_dead = false;
+      thickness = 1.0f;
+    }
+
+    int x_ = x + render_x;
+    int y_ = y + render_y;
     int row = y_ / size;
     int col = x_ / size;
 
     grids[row][col].state = grids[row][col].state == 1 ? 0 : 1;
   }
 
-  void AddSize(int size) { this->size += size; }
-  void MoveStartX(int dx) { this->start_x += dx; }
-  void MoveStartY(int dy) { this->start_y += dy; }
+  void AddSize(int size) {
+    this->size += size;
+    this->thickness += size * 0.05;
+    this->thickness = this->thickness < 0.5 ? 0.5 : this->thickness;
+  }
+  void MoveStartX(int dx) { this->move_x -= dx; }
+  void MoveStartY(int dy) { this->move_y -= dy; }
+  bool AllDead() { return all_dead; }
+  bool Start() { return start; }
+  void Start(bool start) { this->start = start; }
 
  private:
   std::vector<std::vector<Grid>> grids;
-  float size;
-  float start_x;
-  float start_y;
-  int padding;
-  int rows;
-  int cols;
-  float width_ratio;
-  float height_ratio;
-  long cycle;
+  float size;      ///< grid's size
+  float render_x;  ///< start x coordinate for rendering
+  float render_y;  ///< start y coordinate for rendering
+  float move_x;    ///< moved x, start_x+move_x will be final coordinate x for
+                   ///< rendering
+  float move_y;    ///< moved y, start_y+move_y will be final coordinate y for
+                   ///< rendering
+  int padding;     ///< padding between grid and background
+  int rows;        ///< rows number of grids
+  int cols;        ///< cols number of grids
+  float width_ratio;   ///< width ratio, window's width * width_raio will be
+                       ///< grid's render width
+  float height_ratio;  ///< height ratio, window's height * height_raio will be
+                       ///< grid's render height
+  long cycle;          ///< current generation
+  float thickness;     ///< line thickness
+  bool all_dead;       ///< no existing object
+  bool start;          ///< check if game is started
 };

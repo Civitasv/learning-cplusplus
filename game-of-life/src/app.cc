@@ -9,7 +9,6 @@ App::App()
     : window("Game Of Life", 1280, 640),
       game_of_life(1000, 1000, 20),
       is_mouse_button_down(false),
-      game_start(false),
       prev_x(-1),
       prev_y(-1) {
   SetTargetFPS(60);  // Set our game to run at 60 frames-per-second
@@ -28,23 +27,21 @@ void App::OnEvent() {
   if (IsKeyDown(KEY_DOWN)) game_of_life.AddRows(10);*/
   if (IsKeyDown(KEY_ENTER)) {
     // game start
-    game_start = true;
+    game_of_life.Start(true);
   }
 
   if (IsKeyDown(KEY_SPACE)) {
     // game pause
-    game_start = false;
+    game_of_life.Start(false);
   }
 
   if (IsKeyDown(KEY_Q)) {
     // game reset
-    game_start = false;
+    game_of_life.Start(false);
     game_of_life.Init();
   }
 
-  if (game_start) {
-    game_of_life.Next();
-  }
+  game_of_life.Next();
 
   if (GetMouseWheelMove() != 0) {
     game_of_life.AddSize(GetMouseWheelMove());
@@ -57,7 +54,7 @@ void App::OnEvent() {
     game_of_life.MoveStartY(y - prev_y);
   }
 
-  if (!game_start && IsMouseButtonPressed(MOUSE_BUTTON_RIGHT)) {
+  if (IsMouseButtonPressed(MOUSE_BUTTON_RIGHT)) {
     game_of_life.ToggleState(GetMouseX(), GetMouseY());
   }
 
