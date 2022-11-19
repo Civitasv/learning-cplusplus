@@ -1,6 +1,5 @@
 #pragma once
 
-#include "ray_window.h"
 #include "game_of_life.h"
 
 class App {

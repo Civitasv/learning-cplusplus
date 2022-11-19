@@ -1,0 +1,9 @@
+x = 75, y = 18, rule = B3/S23
+63b3o$2b3o26b3o29bobo$2bobo26bobo28b3o$b3o28b3o16bo4bo16b2o$40bo4bo3b
+2ob4ob2o2b2o10bo$2o32b2o2b2ob4ob2o3bo4bo5bo2bo4b2obo$bo2bo26bo2bo5bo4b
+o17b3o6bo$2b3o26b3o30bo3bo$3bo3bo4bo2bo4bo2bo4bo3bo34bo3bo$6bo6b2o6b2o
+6bo34bo3bo$3bo3bo4bo2bo4bo2bo4bo3bo30b3o6bo$2b3o26b3o17bo4bo5bo2bo4b2o
+bo$bo2bo26bo2bo5bo4bo3b2ob4ob2o2b2o10bo$2o32b2o2b2ob4ob2o3bo4bo16b2o$
+40bo4bo16b3o$b3o28b3o28bobo$2bobo26bobo29b3o$2b3o26b3o!
+#C [[ THUMBSIZE 2 THEME 6 GRID GRIDMAJOR 0 SUPPRESS THUMBLAUNCH ]]
+#C [[ AUTOSTART GPS 3 THUMBSIZE 2 ZOOM 8 HEIGHT 320 WIDTH 660 ]]

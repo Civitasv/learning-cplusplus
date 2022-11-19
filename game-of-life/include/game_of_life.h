@@ -1,6 +1,8 @@
 #pragma once
 #include <algorithm>
 #include <iostream>
+#include <regex>
+#include <sstream>
 #include <string>
 #include <vector>
 
@@ -192,13 +194,94 @@ class GameOfLife {
   void AddSize(int size) {
     this->size += size;
     this->thickness += size * 0.05;
-    this->thickness = this->thickness < 0.5 ? 0.5 : this->thickness;
+    this->thickness = this->thickness < 0.6 ? 0.6f : this->thickness;
+    this->size = this->size < 2 ? 2 : this->size;
   }
   void MoveStartX(int dx) { this->move_x -= dx; }
   void MoveStartY(int dy) { this->move_y -= dy; }
   bool AllDead() { return all_dead; }
   bool Start() { return start; }
   void Start(bool start) { this->start = start; }
+
+  void ParseRLEFormat(const char* data, int w, int h) {
+    struct Data {
+      char c;
+      int number;
+    };
+    // header line
+    std::istringstream f(data);
+    std::string line;
+
+    // Skip comments
+    while (std::getline(f, line)) {
+      if (line[0] != '#') break;
+    }
+
+    // regex match
+    const std::regex regex_str(
+        "x\\s*=\\s*(\\d+),\\s*y\\s*=\\s*(\\d+),\\s*(rule\\s*=\\s*([\\/"
+        ",a-z,A-Z,\\d]*))?");
+    std::smatch pieces_match;
+    if (std::regex_match(line, pieces_match, regex_str)) {
+      std::ssub_match sub_match;
+      int m, n;
+      std::string rule;
+      if (pieces_match.size() == 3) {
+        // without rule
+        sub_match = pieces_match[1];
+        m = std::stoi(sub_match.str());
+        sub_match = pieces_match[2];
+        n = std::stoi(sub_match.str());
+      } else if (pieces_match.size() == 5) {
+        sub_match = pieces_match[1];
+        m = std::stoi(sub_match.str());
+        sub_match = pieces_match[2];
+        n = std::stoi(sub_match.str());
+        sub_match = pieces_match[4];
+        rule = sub_match.str();
+      } else {
+        return;
+      }
+
+      // Parse <run_count><tag>
+      bool end = false;
+      std::string number = "";
+      std::vector<Data> res;
+
+      while (std::getline(f, line)) {
+        for (auto& item : line) {
+          if (item == '!') {
+            end = true;
+            break;
+          }
+          if (item == 'b' || item == 'o' || item == '$') {
+            res.push_back({item, number == "" ? 1 : std::stoi(number)});
+            number = "";
+          } else {
+            number = number + item;
+          }
+        }
+        if (end) break;
+      }
+
+      int row = 0, col = 0;
+      int start_row = render_y / size + n / 2;
+      int start_col = render_x / size + m / 2;
+      for (int i = 0; i < res.size(); i++) {
+        if (res[i].c == '$') {
+          row += res[i].number;
+          col = 0;
+          continue;
+        }
+        int size = res[i].number;
+        for (int j = 0; j < size; j++) {
+          grids[start_row + row][start_col + col].state =
+              (res[i].c == 'b' ? 0 : 1);
+          col++;
+        }
+      }
+    }
+  }
 
  private:
   std::vector<std::vector<Grid>> grids;

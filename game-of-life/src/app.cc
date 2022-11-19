@@ -3,7 +3,7 @@
 #include <iostream>
 
 #include "error.h"
-#include "raylib.h"
+#include "raygui.h"
 
 App::App()
     : window("Game Of Life", 1280, 640),
@@ -67,6 +67,20 @@ void App::OnEvent() {
     prev_x = -1;
     prev_y = -1;
   }
+
+  if (IsFileDropped()) {
+    int count = 0;
+    FilePathList list = LoadDroppedFiles();
+    char** files = list.paths;
+    if (IsFileExtension(files[0], ".rle")) {
+      char* data = LoadFileText(files[0]);
+
+      game_of_life.ParseRLEFormat(data, window.GetW(), window.GetH());
+
+      UnloadFileText(data);
+    }
+    UnloadDroppedFiles(list);
+  }
 }
 
 void App::OnRender() {
@@ -79,6 +93,8 @@ void App::OnRender() {
 }
 
 int App::Run() {
+  // Custom file dialog
+
   while (!WindowShouldClose()) {
     OnEvent();
 
