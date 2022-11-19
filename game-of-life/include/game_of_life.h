@@ -44,6 +44,7 @@ class GameOfLife {
     cycle = 0;
     all_dead = false;
     thickness = 1.0f;
+    size = 20;
     move_x = 0.0f;
     move_y = 0.0f;
   }
@@ -110,9 +111,9 @@ class GameOfLife {
                 (y + size) <= height - padding)) {
             continue;
           }
-
-          DrawRectangleLinesEx({x * 1.0f, y * 1.0f, size, size}, thickness,
-                               state_1);
+          if (thickness > 0)
+            DrawRectangleLinesEx({x * 1.0f, y * 1.0f, size, size}, thickness,
+                                 state_1);
           if (item.state == 1)
             DrawRectangle(x + 1, y + 1, size - 2, size - 2, state_2);
         }
@@ -193,9 +194,9 @@ class GameOfLife {
 
   void AddSize(int size) {
     this->size += size;
-    this->thickness += size * 0.05;
-    this->thickness = this->thickness < 0.6 ? 0.6f : this->thickness;
-    this->size = this->size < 2 ? 2 : this->size;
+    this->thickness += size > 0 ? 0.1 : -0.1;
+    this->thickness = this->thickness < 0.2 ? 0 : this->thickness;
+    this->size = this->size < 3 ? 3 : this->size;
   }
   void MoveStartX(int dx) { this->move_x -= dx; }
   void MoveStartY(int dy) { this->move_y -= dy; }
@@ -208,6 +209,12 @@ class GameOfLife {
       char c;
       int number;
     };
+
+    for (int i = 0; i < rows; i++) {
+      for (int j = 0; j < cols; j++) {
+        grids[i][j].state = 0;
+      }
+    }
     // header line
     std::istringstream f(data);
     std::string line;
@@ -265,8 +272,8 @@ class GameOfLife {
       }
 
       int row = 0, col = 0;
-      int start_row = render_y / size + n / 2;
-      int start_col = render_x / size + m / 2;
+      int start_row = render_y / size;
+      int start_col = render_x / size;
       for (int i = 0; i < res.size(); i++) {
         if (res[i].c == '$') {
           row += res[i].number;

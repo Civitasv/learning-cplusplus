@@ -7,11 +7,11 @@
 
 App::App()
     : window("Game Of Life", 1280, 640),
-      game_of_life(1000, 1000, 20),
+      game_of_life(3000, 3000, 20),
       is_mouse_button_down(false),
       prev_x(-1),
       prev_y(-1) {
-  SetTargetFPS(60);  // Set our game to run at 60 frames-per-second
+  SetTargetFPS(20);  // Set our game to run at 60 frames-per-second
 
   // Enable Multi Sampling Anti Aliasing 4x (if available)
   SetConfigFlags(FLAG_MSAA_4X_HINT);
