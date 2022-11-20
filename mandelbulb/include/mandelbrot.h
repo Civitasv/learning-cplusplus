@@ -143,8 +143,6 @@ class Mandelbrot {
   std::vector<std::vector<float>> value;
   float real_start, real_end, imag_start, imag_end;
   int max_iter;
-  float render_x;
-  float render_y;
   float padding;       ///< padding
   float width_ratio;   ///< width ratio, window's width * width_raio will be
                        ///< grid's render width
