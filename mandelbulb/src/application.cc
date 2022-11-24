@@ -25,7 +25,7 @@ void mouse_callback(GLFWwindow* window, double xpos, double ypos);
 void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
 
 // camera
-Camera camera(glm::vec3(0.0f, 0.0f, 400.0f));
+Camera camera(glm::vec3(0.0f, 0.0f, 5.0f));
 float lastX = 300, lastY = 300;
 bool firstMouse = true;
 
@@ -34,9 +34,9 @@ float deltaTime = 0.0f;  // Time between current frame and last frame
 float lastFrame = 0.0f;  // Time of last frame
 
 // rotation
-float angle_x = 50.0f;
-float angle_y = 50.0f;
-float angle_z = 50.0f;
+float angle_x = 0.0f;
+float angle_y = 0.0f;
+float angle_z = 0.0f;
 enum RotationMode { X, Y, Z };
 RotationMode rotation_mode = X;
 
@@ -54,7 +54,7 @@ int main(void) {
   glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
   /* Create a windowed mode window and its OpenGL context */
-  window = glfwCreateWindow(640, 640, "Mandelbulb", NULL, NULL);
+  window = glfwCreateWindow(1280, 720, "Mandelbulb", NULL, NULL);
   if (!window) {
     glfwTerminate();
     return -1;

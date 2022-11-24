@@ -20,21 +20,75 @@
 #include "vertex_buffer.h"
 #include "vertex_buffer_layout.h"
 
+struct Spherical {
+  float r;
+  float theta;
+  float phi;
+
+  Spherical(float r, float theta, float phi) : r(r), theta(theta), phi(phi) {}
+
+  static Spherical From(float x, float y, float z) {
+    float r = sqrt(x * x + y * y + z * z);
+    float theta = atan2(sqrt(x * x + y * y), z);
+    float phi = atan2(y, x);
+    return {r, theta, phi};
+  }
+};
+
 class Mandelbulb {
  public:
   Mandelbulb() : points({}) { Init(); }
 
   void Init() {
     points.clear();
-    for (float i = 0; i < 100; i += 1) {
-      for (float j = 0; j < 100; j += 1) {
-        for (float k = 0; k < 100; k += 1) {
-          points.push_back(i);
-          points.push_back(j);
-          points.push_back(k);
-          points.push_back(1.0f);
-          points.push_back(1.0f);
-          points.push_back(1.0f);
+    for (float i = 0; i < 1000; i += 1) {
+      for (float j = 0; j < 1000; j += 1) {
+        bool edge = false;
+        for (float k = 0; k < 1000; k += 1) {
+          float x = -1.0f + i / 100 * 2.0f;
+          float y = -1.0f + j / 100 * 2.0f;
+          float z = -1.0f + k / 100 * 2.0f;
+
+          int max_iter = 200;
+          int iteration = 0;
+          int n = 16;
+
+          glm::vec3 zeta(0);
+
+          while (true) {
+            Spherical spherical_z = Spherical::From(zeta.x, zeta.y, zeta.z);
+            float newx = pow(spherical_z.r, n) * sin(spherical_z.theta * n) *
+                         cos(spherical_z.phi * n);
+            float newy = pow(spherical_z.r, n) * sin(spherical_z.theta * n) *
+                         sin(spherical_z.phi * n);
+            float newz = pow(spherical_z.r, n) * cos(spherical_z.theta * n);
+
+            zeta.x = newx + x;
+            zeta.y = newy + y;
+            zeta.z = newz + z;
+
+            iteration++;
+
+            if (spherical_z.r > 2) {
+              if (edge) {
+                edge = false;
+              }
+              break;
+            }
+
+            if (iteration > max_iter) {
+              if (!edge) {
+                edge = true;
+                points.push_back(x);
+                points.push_back(y);
+                points.push_back(z);
+                points.push_back(i / 100);
+                points.push_back(j / 100);
+                points.push_back(k / 100);
+              }
+              break;
+            }
+          }
         }
       }
     }
@@ -67,8 +121,8 @@ class Mandelbulb {
     model = glm::rotate(model, glm::radians(angle_z),
                         glm::vec3(0.0f, 0.0f, 1.0f));  // ÈÆzÖáÐý×ª
 
-    glm::mat4 proj = glm::perspective(glm::radians(camera.zoom),
-                                      640.0f / 640.0f, 0.1f, 400.0f);
+    glm::mat4 proj =
+        glm::perspective(glm::radians(camera.zoom), 16.0f / 9.0f, 0.1f, 100.0f);
 
     shader.SetUniformMat4f("model", model);
     shader.SetUniformMat4f("view", camera.GetViewMatrix());
@@ -80,5 +134,4 @@ class Mandelbulb {
  private:
   std::vector<float> points;
   float real_start, real_end, imag_start, imag_end;
-  int max_iter;
 };
