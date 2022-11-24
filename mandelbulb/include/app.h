@@ -1,6 +1,6 @@
 #pragma once
 
-#include "mandelbrot.h"
+#include "mandelbulb.h"
 
 class App {
  public:
@@ -13,11 +13,7 @@ class App {
   int Run();
 
  private:
+  Camera camera;
   RayWindow window;
-  Mandelbrot mandelbrot;
-  bool is_mouse_button_down;
-  int prev_x;
-  int prev_y;
-  int current_x;
-  int current_y;
+  Mandelbulb mandelbulb;
 };
