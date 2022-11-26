@@ -5,7 +5,8 @@
 #include "error.h"
 #include "fourier.h"
 
-App::App() : window("Game Of Life", 1920, 1080), fourier("svg/nano.svg") {
+App::App()
+    : window("Game Of Life", 1920, 1080), fourier("svg/tag.svg", 1920, 1080) {
   SetTargetFPS(12);  // Set our game to run at 60 frames-per-second
 
   // Enable Multi Sampling Anti Aliasing 4x (if available)

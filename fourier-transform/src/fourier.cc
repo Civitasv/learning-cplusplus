@@ -6,7 +6,8 @@
 #define NANOSVG_IMPLEMENTATION  // Expands implementation
 #include "nanosvg.h"
 
-Fourier::Fourier(const char* path) : calculated(false), time(0.0) {
+Fourier::Fourier(const char* path, int w, int h)
+    : calculated(false), time(0.0) {
   // Load
   struct NSVGimage* image;
   image = nsvgParseFromFile(path, "px", 96);
@@ -19,7 +20,8 @@ Fourier::Fourier(const char* path) : calculated(false), time(0.0) {
         Point p1 = {p[2], p[3]};
         Point p2 = {p[4], p[5]};
         Point p3 = {p[6], p[7]};
-
+        // DrawLineBezierCubic({p{0}, p{1}}, {p{2}, p{3}}, {p{4}, p{5}},
+        //                     {p{6}, p{7}}, 1.0f, WHITE);
         for (float t = 0; t <= 1; t += 0.1) {
           float x = (1 - t) * (1 - t) * (1 - t) * p0.x +
                     3 * (1 - t) * (1 - t) * t * p1.x +
@@ -27,8 +29,7 @@ Fourier::Fourier(const char* path) : calculated(false), time(0.0) {
           float y = (1 - t) * (1 - t) * (1 - t) * p0.y +
                     3 * (1 - t) * (1 - t) * t * p1.y +
                     3 * (1 - t) * t * t * p2.y + t * t * t * p3.y;
-          xs.push_back(x);
-          ys.push_back(y);
+          xs.push_back({x * 2 - 500, y * 2 - 500});
         }
       }
     }
