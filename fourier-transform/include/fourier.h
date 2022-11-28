@@ -55,8 +55,9 @@ class Fourier {
     path.insert(path.begin(), v);
 
     for (int i = 0; i < path.size() - 1; i++) {
-      DrawLine(path[i].x, path[i].y, path[i + 1].x, path[i + 1].y,
-               {159, 12, 24, 255});
+      DrawLineEx({float(path[i].x), float(path[i].y)},
+                 {float(path[i + 1].x), float(path[i + 1].y)}, 5.0,
+                 {235, 100, 64, 255});
     }
 
     const double dt = 2 * PI / x_trans.size();
@@ -83,9 +84,9 @@ class Fourier {
       x += radius * cos(freq * time + phase + rotation);
       y += radius * sin(freq * time + phase + rotation);
 
-      DrawCircleLines(prevx, prevy, radius, {0, 231, 255, 100});
+      DrawCircleLines(prevx, prevy, radius, {73, 113, 116, 100});
 
-      DrawLine(prevx, prevy, x, y, {0, 158, 255, 255});
+      DrawLine(prevx, prevy, x, y, {73, 113, 116, 255});
     }
 
     return {x, y};
