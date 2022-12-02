@@ -237,7 +237,7 @@ const uint8_t NUMBER_OF_DATA_CODEWORDS_IN_EACH_OF_GROUP_1[40][4] = {
     {115, 46, 24, 15}, {115, 46, 24, 16}, {121, 47, 24, 15}, {121, 47, 24, 15},
     {122, 46, 24, 15}, {122, 46, 24, 15}, {117, 47, 24, 15}, {118, 47, 24, 15}};
 
-const int8_t NUMBER_OF_BLOCKS_IN_GROUP_2[40][4] = {
+const uint8_t NUMBER_OF_BLOCKS_IN_GROUP_2[40][4] = {
     // Version, Ecc Mode
     {0, 0, 0, 0},    {0, 0, 0, 0},     {0, 0, 0, 0},    {0, 0, 0, 0},
     {0, 0, 2, 2},    {0, 0, 0, 0},     {0, 0, 4, 1},    {0, 2, 2, 2},
@@ -262,6 +262,10 @@ const uint8_t NUMBER_OF_DATA_CODEWORDS_IN_EACH_OF_GROUP_2[40][4] = {
     {117, 46, 24, 16}, {116, 48, 25, 16}, {116, 47, 25, 16}, {0, 47, 25, 16},
     {116, 47, 25, 16}, {116, 47, 25, 17}, {122, 48, 25, 16}, {122, 48, 25, 16},
     {123, 47, 25, 16}, {123, 47, 25, 16}, {118, 48, 25, 16}, {119, 48, 25, 16}};
+
+const uint8_t REMAINDER_BITS[40] = {0, 7, 7, 7, 7, 7, 0, 0, 0, 0, 0, 0, 0, 3,
+                                    3, 3, 3, 3, 3, 3, 4, 4, 4, 4, 4, 4, 4, 3,
+                                    3, 3, 3, 3, 3, 3, 0, 0, 0, 0, 0, 0};
 
 struct ImageInfo {
   unsigned char r;  ///< r
@@ -464,7 +468,7 @@ class QRCode {
     return {mode, ecc, desire_version, binary.str()};
   }
 
-  std::vector<uint8_t> ErrorCorrectionCoding(EncodingResult& encoding_res) {
+  std::string ErrorCorrectionCoding(EncodingResult& encoding_res) {
     std::string& binary_str = encoding_res.binary_str;
     int version = encoding_res.version;
     EncodingMode encoding_mode = encoding_res.mode;
@@ -472,27 +476,86 @@ class QRCode {
 
     // 1. break data codewords into blocks if necessary
     int bytes = binary_str.size() / 8;
-    int group1 = NUMBER_OF_BLOCKS_IN_GROUP_1[version][error_level];
-    int group2 = NUMBER_OF_BLOCKS_IN_GROUP_2[version][error_level];
-    int ecc_count =
-        EC_CODEWORDS_PER_BLOCK[version][error_level] * (group1 + group2);
+    uint8_t group1_block_count =
+        NUMBER_OF_BLOCKS_IN_GROUP_1[version][error_level];
+    uint8_t group1_per_count =
+        NUMBER_OF_DATA_CODEWORDS_IN_EACH_OF_GROUP_1[version][error_level];
+    uint8_t group2_block_count =
+        NUMBER_OF_BLOCKS_IN_GROUP_2[version][error_level];
+    uint8_t group2_per_count =
+        NUMBER_OF_DATA_CODEWORDS_IN_EACH_OF_GROUP_2[version][error_level];
+
+    int ecc_count = EC_CODEWORDS_PER_BLOCK[version][error_level];
 
     // 2. Reed Solomon Error correction
-    // message polynomial
-    std::vector<uint8_t> message_polynomial;
-    for (int i = 0; i < binary_str.size(); i += 8) {
-      message_polynomial.push_back(
-          ConvertBinary8ToValue(binary_str.substr(i, 8)));
+    std::vector<std::vector<uint8_t>> eccs;
+    std::vector<std::vector<uint8_t>> blocks;
+    for (uint8_t i = 0; i < group1_block_count; i++) {
+      // message polynomial
+      std::vector<uint8_t> message_polynomial;
+      std::vector<uint8_t> block;
+      for (int j = 0; j < group1_per_count; j++) {
+        uint8_t val = ConvertBinary8ToValue(
+            binary_str.substr(i * group1_per_count + j * 8, 8));
+        message_polynomial.push_back(val);
+        block.push_back(val);
+      }
+      // generator polynomial
+      std::vector<uint8_t> generator_polynomial =
+          ReedSolomonComputeDivisor(ecc_count);
+      std::vector<uint8_t> remainder =
+          ReedSolomonComputeRemainder(message_polynomial, generator_polynomial);
+      eccs.push_back(remainder);
+      blocks.push_back(block);
     }
-    // generator polynomial
-    std::vector<uint8_t> generator_polynomial =
-        ReedSolomonComputeDivisor(ecc_count);
-    std::vector<uint8_t> remainder =
-        ReedSolomonComputeRemainder(message_polynomial, generator_polynomial);
-    return remainder;
-  }
 
-  void StructureFinalMessage() {}
+    for (uint8_t i = 0; i < group2_block_count; i++) {
+      // message polynomial
+      std::vector<uint8_t> message_polynomial;
+      std::vector<uint8_t> block;
+      for (int j = 0; j < group2_per_count; j++) {
+        uint8_t val = ConvertBinary8ToValue(
+            binary_str.substr(i * group2_per_count + j * 8, 8));
+        message_polynomial.push_back(val);
+        block.push_back(val);
+      }
+      // generator polynomial
+      std::vector<uint8_t> generator_polynomial =
+          ReedSolomonComputeDivisor(ecc_count);
+      std::vector<uint8_t> remainder =
+          ReedSolomonComputeRemainder(message_polynomial, generator_polynomial);
+      eccs.push_back(remainder);
+      blocks.push_back(block);
+    }
+
+    // 3. Interleave the blocks
+    std::vector<uint8_t> interleave;
+    for (int index = 0;
+         index < std::max<uint8_t>(group1_per_count, group2_per_count);
+         index++) {
+      for (int j = 0; j < blocks.size(); j++) {
+        if (blocks[j].size() > index) interleave.push_back(blocks[j][index]);
+      }
+    }
+
+    for (int index = 0; index < ecc_count; index++) {
+      for (int j = 0; j < eccs.size(); j++) {
+        interleave.push_back(eccs[j][index]);
+      }
+    }
+
+    // 4. Convert to Binary
+    std::string result;
+    for (auto& item : interleave) {
+      result += ConvertValueToBinary(item, 8);
+    }
+
+    // 5. Add Remainder Bits
+    for (int i = 0; i < REMAINDER_BITS[version]; i++) {
+      result += '0';
+    }
+    return result;
+  }
 
   std::vector<uint8_t> ReedSolomonComputeRemainder(
       const std::vector<uint8_t>& data, const std::vector<uint8_t>& divisor) {
