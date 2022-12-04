@@ -51,13 +51,34 @@ std::vector<uint8_t> ReedSolomonComputeRemainder(
   }
   return result;
 }
-
+std::vector<int> GetAlignmentPatternPositions(int version, int size) {
+  if (version == 1)
+    return {-1, -1};
+  else {
+    int numAlign = version / 7 + 2;
+    int step = (version == 32)
+                   ? 26
+                   : (version * 4 + numAlign * 2 + 1) / (numAlign * 2 - 2) * 2;
+    std::vector<int> result;
+    for (int i = 0, pos = size - 7; i < numAlign - 1; i++, pos -= step)
+      result.insert(result.begin(), pos);
+    result.insert(result.begin(), 6);
+    return result;
+  }
+}
 int main() {
-  vector<uint8_t> message = {32, 91, 11,  120, 209, 114, 220, 77,
+  /*vector<uint8_t> message = {32, 91, 11,  120, 209, 114, 220, 77,
                              67, 64, 236, 17,  236, 17,  236, 17};
   vector<uint8_t> generator = ReedSolomonComputeDivisor(10);
   auto res = ReedSolomonComputeRemainder(message, generator);
   for (auto& item : res) {
+    cout << (int)item << '\n';
+  }*/
+
+  int version = 13;
+  int size = ((version - 1) * 4) + 21;
+  auto result = GetAlignmentPatternPositions(version, size);
+  for (auto& item : result) {
     cout << (int)item << '\n';
   }
 }

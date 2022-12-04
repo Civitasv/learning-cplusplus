@@ -1,30 +1,35 @@
 ﻿#include <iostream>
 #include <string>
 
+#include "qrcode/qrcode.h"
+
 int main(int argc, char** argv) {
-  std::cout << "Please: " << '\n';
-  std::cout << "1. Encode" << '\n';
-  std::cout << "2. Decode" << '\n';
+  qrcode::QRCode code;
+  code.Encode("我爱你呀");
 
-  std::cout << "What do you want to do? ";
+  // std::cout << "Please: " << '\n';
+  // std::cout << "1. Encode" << '\n';
+  // std::cout << "2. Decode" << '\n';
 
-  int choice;
+  // std::cout << "What do you want to do? ";
 
-  std::cin >> choice;
+  // int choice;
 
-  if (choice == 1) {
-    std::string message;
-    std::cout << "Please input the message that you want to encode: ";
-    std::cin >> message;
+  // std::cin >> choice;
 
-    // TODO ENCODE
-  } else if (choice == 2) {
-    std::string path;
-    std::cout << "Please input path of QR code that you want to decode: ";
-    std::cin >> path;
+  // if (choice == 1) {
+  //   std::string message;
+  //   std::cout << "Please input the message that you want to encode: ";
+  //   std::cin >> message;
 
-    // TODO DECODE
-  }
+  //  // TODO ENCODE
+  //} else if (choice == 2) {
+  //  std::string path;
+  //  std::cout << "Please input path of QR code that you want to decode: ";
+  //  std::cin >> path;
+
+  //  // TODO DECODE
+  //}
 
   return 0;
 }
