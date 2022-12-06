@@ -1,11 +1,12 @@
 ﻿#include <iostream>
 #include <string>
 
+#include "qrcode/gf.h"
 #include "qrcode/qrcode.h"
 
 int main(int argc, char** argv) {
   qrcode::QRCode code;
-  code.Encode("我爱你呀");
+  code.Encode("不要问我为什么爱你，我爱你就够了", "test2.png", qrcode::L);
 
   // std::cout << "Please: " << '\n';
   // std::cout << "1. Encode" << '\n';
