@@ -8,6 +8,7 @@
 #include <sstream>
 #include <string>
 #include <vector>
+#include <climits>
 
 #include "const.h"
 #include "gf.h"
