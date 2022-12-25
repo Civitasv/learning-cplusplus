@@ -417,8 +417,6 @@ class QRCode {
         }
       }
     }
-    this->modules = std::move(modules);
-    this->is_function = std::move(is_function);
   }
 
   void DataMasking() {
