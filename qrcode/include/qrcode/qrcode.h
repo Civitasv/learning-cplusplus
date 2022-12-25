@@ -4,11 +4,11 @@
 #include <array>
 #include <bitset>
 #include <cassert>
+#include <climits>
 #include <iostream>
 #include <sstream>
 #include <string>
 #include <vector>
-#include <climits>
 
 #include "const.h"
 #include "gf.h"
@@ -303,6 +303,8 @@ class QRCode {
     size_t size = ((version - 1) * 4) + 21;  // module size
 
     // initialize module and is_function
+    modules.clear();
+    is_function.clear();
     for (int i = 0; i < size; i++) {
       std::vector<bool> item;
       for (int j = 0; j < size; j++) {
