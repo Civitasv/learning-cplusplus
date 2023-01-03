@@ -13,3 +13,6 @@
 [submodule "game dev/opengl_series"]
 	path = game_engine/opengl_series
 	url = git@github.com:Civitasv/learning-opengl.git
+[submodule "scheme_compiler"]
+	path = scheme_compiler
+	url = git@github.com:Civitasv/scxx.git
